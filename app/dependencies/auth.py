@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 security_scheme = HTTPBearer(auto_error=False)
 
 def get_current_user_id(
-    authorization: Optional[str] = Header(None, alias="authorization", description="User ID or Token (e.g. lWxV9Cx98sRcXIdRMUTqxiVY24R2 or Bearer token)"),
+    authorization: Optional[str] = Header(None, alias="authorization", description="User ID required"),
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_scheme)
 ) -> str:
     """
@@ -21,14 +21,21 @@ def get_current_user_id(
     elif authorization:
         raw_val = authorization
 
-    if not raw_val or raw_val.strip() == "" or raw_val.strip().lower() == "authorization":
-        # Dev fallback if header field was left empty or default in Swagger
-        logger.info("No header provided in dev mode, defaulting to test user 'usr_dev123'")
-        return "usr_dev123"
+    if not raw_val or raw_val.strip() == "":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing authorization header."
+        )
 
     token = raw_val.strip()
     if token.startswith("Bearer "):
         token = token.split("Bearer ")[1].strip()
+
+    if token.lower() == "authorization":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please enter your user_id in the authorization field."
+        )
 
     auth_client = get_auth_client()
 
@@ -36,5 +43,5 @@ def get_current_user_id(
         decoded_token = auth_client.verify_id_token(token)
         return decoded_token["uid"]
     except Exception as err:
-        logger.info(f"Using direct user_id/dev token in dev mode: '{token}' (Verification error: {str(err)})")
+        logger.info(f"Using direct user_id/dev token in dev mode: '{token}'")
         return token

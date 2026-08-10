@@ -1,7 +1,7 @@
 import json
 import logging
 import httpx
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -45,11 +45,17 @@ STATIC_THEMES: Dict[int, Dict[str, Any]] = {
     }
 }
 
+# Static Background Removal Instruction ($0 LLM cost)
+STATIC_BG_REMOVAL_PROMPT = {
+    "prompt": "Remove background, isolate main foreground subject with transparent/clean background",
+    "negative_prompt": "background elements, shadows, noise, clutter",
+    "style_tags": ["bg-removal", "segmentation"]
+}
+
 def load_theme_prompt(theme_id: int) -> Dict[str, Any]:
     """O(1) static lookup for theme prompt without calling LLM."""
     if theme_id in STATIC_THEMES:
         return STATIC_THEMES[theme_id]
-    # Fallback for unknown theme ID
     return {
         "id": theme_id,
         "name": f"Theme #{theme_id}",
@@ -108,7 +114,6 @@ async def qwen_parse_user_prompt(user_prompt: str) -> Dict[str, Any]:
             res_data = response.json()
             raw_content = res_data["choices"][0]["message"]["content"].strip()
             
-            # Clean possible markdown fence code blocks
             if raw_content.startswith("```"):
                 lines = raw_content.splitlines()
                 raw_content = "\n".join([line for line in lines if not line.startswith("```")]).strip()
@@ -127,14 +132,20 @@ async def qwen_parse_user_prompt(user_prompt: str) -> Dict[str, Any]:
             "style_tags": ["fallback"]
         }
 
-async def process_job_prompt(params_dict: dict) -> Dict[str, Any]:
+async def process_job_prompt(params_dict: dict, job_type: Optional[str] = None) -> Dict[str, Any]:
     """
     Route prompt parsing per Task B2:
+    - BG_REMOVAL -> hardcoded static segmentation prompt (O(1), $0 LLM cost)
     - themeId -> static lookup (O(1), $0 LLM cost)
     - userPrompt -> Qwen 2.5 7B LLM call
     """
+    if job_type == "BG_REMOVAL":
+        logger.info("Routing BG_REMOVAL job via static hardcoded segmentation prompt ($0 LLM cost)")
+        return STATIC_BG_REMOVAL_PROMPT
+
     theme_id = params_dict.get("themeId")
     user_prompt = params_dict.get("userPrompt")
+    image_url = params_dict.get("imageUrl")
 
     if theme_id is not None:
         logger.info(f"Routing job prompt via static Theme Preset Library (themeId={theme_id})")
@@ -142,5 +153,8 @@ async def process_job_prompt(params_dict: dict) -> Dict[str, Any]:
     elif user_prompt:
         logger.info(f"Routing user prompt via Qwen 2.5 7B Instruct")
         return await qwen_parse_user_prompt(user_prompt)
+    elif image_url:
+        logger.info("Job contains imageUrl without prompt, returning static background removal prompt")
+        return STATIC_BG_REMOVAL_PROMPT
     else:
-        raise ValueError("Job parameters must include either 'themeId' or 'userPrompt'")
+        raise ValueError("Job parameters must include 'themeId', 'userPrompt', or 'imageUrl'")

@@ -1,26 +1,17 @@
 INFO:     Will watch for changes in these directories: ['/Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [46370] using WatchFiles
-INFO:     Started server process [46373]
+INFO:     Started reloader process [47862] using WatchFiles
+INFO:     Started server process [47865]
 INFO:     Waiting for application startup.
-2026-08-10 16:08:04,811 - ai_studio - INFO - Initializing AI Studio Backend Services...
-2026-08-10 16:08:04,811 - app.db.firebase - INFO - Initializing Firebase Admin SDK using credentials file: /Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-/ai-studio-637ab-firebase-adminsdk-fbsvc-d51de0aebf.json
-2026-08-10 16:08:04,863 - ai_studio - INFO - Firebase Admin SDK initialized successfully for project: ai-studio-637ab
+2026-08-10 18:20:03,132 - ai_studio - INFO - Initializing AI Studio Backend Services...
+2026-08-10 18:20:03,133 - app.db.firebase - INFO - Initializing Firebase Admin SDK using credentials file: /Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-/ai-studio-637ab-firebase-adminsdk-fbsvc-d51de0aebf.json
+2026-08-10 18:20:03,183 - ai_studio - INFO - Firebase Admin SDK initialized successfully for project: ai-studio-637ab
 INFO:     Application startup complete.
-INFO:     127.0.0.1:60899 - "GET /health HTTP/1.1" 200 OK
-2026-08-10 16:08:10,164 - app.dependencies.auth - INFO - Using direct user_id/dev token in dev mode: 'lWxV9Cx98sRcXIdRMUTqxiVY24R2' (Verification error: Wrong number of segments in token: b'lWxV9Cx98sRcXIdRMUTqxiVY24R2')
-2026-08-10 16:08:10,809 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_f697d804e3c5. New balance: 97
-2026-08-10 16:08:10,809 - app.services.prompt_service - INFO - Routing user prompt via Qwen 2.5 7B Instruct
-2026-08-10 16:08:11,204 - httpx - INFO - HTTP Request: POST https://router.huggingface.co/v1/chat/completions "HTTP/1.1 403 Forbidden"
-2026-08-10 16:08:11,205 - app.services.prompt_service - ERROR - Hugging Face Router API returned status 403: {"error":"This authentication method does not have sufficient permissions to call Inference Providers on behalf of user AryanAbhinav"}
-2026-08-10 16:08:11,258 - app.services.job_service - INFO - Created job doc job_f697d804e3c5 for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
-2026-08-10 16:08:20,207 - app.services.queue_service - WARNING - Google Cloud Tasks client error / local mode for jobId job_f697d804e3c5: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.
-INFO:     127.0.0.1:60901 - "POST /v1/generateJob HTTP/1.1" 201 Created
-2026-08-10 16:08:53,656 - app.dependencies.auth - INFO - No header provided in dev mode, defaulting to test user 'usr_dev123'
-2026-08-10 16:08:53,761 - app.services.wallet_service - INFO - Deducted 3 credits from user usr_dev123 for job job_e4e6d7c3d29a. New balance: 97
-2026-08-10 16:08:53,761 - app.services.prompt_service - INFO - Routing user prompt via Qwen 2.5 7B Instruct
-2026-08-10 16:08:54,035 - httpx - INFO - HTTP Request: POST https://router.huggingface.co/v1/chat/completions "HTTP/1.1 403 Forbidden"
-2026-08-10 16:08:54,037 - app.services.prompt_service - ERROR - Hugging Face Router API returned status 403: {"error":"This authentication method does not have sufficient permissions to call Inference Providers on behalf of user AryanAbhinav"}
-2026-08-10 16:08:54,070 - app.services.job_service - INFO - Created job doc job_e4e6d7c3d29a for user usr_dev123 with cost 3
-2026-08-10 16:09:03,215 - app.services.queue_service - WARNING - Google Cloud Tasks client error / local mode for jobId job_e4e6d7c3d29a: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.
-INFO:     127.0.0.1:60915 - "POST /v1/generateJob HTTP/1.1" 201 Created
+INFO:     127.0.0.1:62387 - "GET /health HTTP/1.1" 200 OK
+2026-08-10 18:20:09,223 - app.dependencies.auth - INFO - Using direct user_id/dev token in dev mode: 'lWxV9Cx98sRcXIdRMUTqxiVY24R2'
+2026-08-10 18:20:10,385 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_2afe08013505. New balance: 179
+2026-08-10 18:20:10,386 - app.services.prompt_service - INFO - Routing BG_REMOVAL job via static hardcoded segmentation prompt ($0 LLM cost)
+2026-08-10 18:20:10,553 - app.services.job_service - INFO - Created job doc job_2afe08013505 for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
+2026-08-10 18:20:10,681 - app.services.queue_service - INFO - Successfully enqueued job job_2afe08013505 to Celery / Redis queue (task_id=d6f880f8-e199-42c0-b006-72327670173d)
+INFO:     127.0.0.1:62394 - "POST /v1/generateJob HTTP/1.1" 201 Created
+INFO:     127.0.0.1:62413 - "GET /job/job_2afe08013505 HTTP/1.1" 200 OK

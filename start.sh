@@ -20,6 +20,18 @@ if [ ! -d "venv" ]; then
     ./venv/bin/pip install -r requirements.txt
 fi
 
+# Check if redis-server is running on localhost:6379
+if nc -z localhost 6379 2>/dev/null; then
+    echo "🔴 Redis server detected on localhost:6379."
+    echo "⚡ Launching Celery background worker..."
+    PYTHONPATH=. ./venv/bin/celery -A app.workers.celery_worker worker --loglevel=info -P threads -c 4 > celery.log 2>&1 &
+    CELERY_PID=$!
+    echo "Celery worker running with PID: ${CELERY_PID} (Logs: tail -f celery.log)"
+else
+    echo "⚠️ Redis server is not running on localhost:6379."
+    echo "   To enable Celery background tasks locally, start Redis using: redis-server"
+fi
+
 echo "Starting FastAPI server on http://localhost:${PORT}..."
 PYTHONPATH=. ./venv/bin/uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --reload > server.log 2>&1 &
 

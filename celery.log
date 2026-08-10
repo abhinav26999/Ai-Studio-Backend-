@@ -1,0 +1,29 @@
+ 
+ -------------- celery@Aeologics-MacBook-Pro-2.local v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- macOS-26.5.2-x86_64-i386-64bit-Mach-O 2026-08-10 18:20:03
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         ai_studio_tasks:0x116df1010
+- ** ---------- .> transport:   redis://localhost:6379/0
+- ** ---------- .> results:     redis://localhost:6379/0
+- *** --- * --- .> concurrency: 4 (thread)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . process_async_job
+
+[2026-08-10 18:20:03,094: INFO/MainProcess] Connected to redis://localhost:6379/0
+[2026-08-10 18:20:03,103: INFO/MainProcess] mingle: searching for neighbors
+[2026-08-10 18:20:04,117: INFO/MainProcess] mingle: all alone
+[2026-08-10 18:20:04,136: INFO/MainProcess] celery@Aeologics-MacBook-Pro-2.local ready.
+[2026-08-10 18:20:10,682: INFO/MainProcess] Task process_async_job[d6f880f8-e199-42c0-b006-72327670173d] received
+[2026-08-10 18:20:10,683: INFO/MainProcess] Celery worker processing job_id=job_2afe08013505, job_type=BG_REMOVAL, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-10 18:20:10,683: INFO/MainProcess] Initializing Firebase Admin SDK using credentials file: /Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-/ai-studio-637ab-firebase-adminsdk-fbsvc-d51de0aebf.json
+[2026-08-10 18:20:11,868: INFO/MainProcess] Executing BiRefNet / RMBG-2.0 Background Removal for job_2afe08013505
+[2026-08-10 18:20:12,183: INFO/MainProcess] Celery task completed successfully for jobId=job_2afe08013505
+[2026-08-10 18:20:12,198: INFO/MainProcess] Task process_async_job[d6f880f8-e199-42c0-b006-72327670173d] succeeded in 1.5150533489941154s: {'success': True, 'jobId': 'job_2afe08013505', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_2afe08013505_bg_removed.png', 'meshUrl': None}

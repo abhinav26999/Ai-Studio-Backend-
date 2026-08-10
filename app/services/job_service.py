@@ -34,10 +34,15 @@ async def create_and_enqueue_job(user_id: str, request: GenerateJobRequest) -> d
     6. Enqueue task for Cloud Run GPU processing.
     7. Return immediately to caller.
     """
-    if request.params.themeId is None and not request.params.userPrompt:
+    if (
+        request.params.themeId is None 
+        and not request.params.userPrompt 
+        and not request.params.imageUrl 
+        and request.jobType != JobType.BG_REMOVAL
+    ):
         raise HTTPException(
             status_code=400,
-            detail="Job parameters must specify either 'themeId' (preset path) or 'userPrompt' (flexible path)."
+            detail="Job parameters must specify either 'themeId' (preset path), 'userPrompt' (flexible path), or 'imageUrl'."
         )
 
     job_id = f"job_{uuid.uuid4().hex[:12]}"
@@ -48,7 +53,7 @@ async def create_and_enqueue_job(user_id: str, request: GenerateJobRequest) -> d
     check_and_deduct_credits(user_id=user_id, cost=cost, job_id=job_id)
 
     # Step 2: Route prompt
-    processed_prompt = await process_job_prompt(request.params.dict())
+    processed_prompt = await process_job_prompt(request.params.dict(), job_type=request.jobType.value)
 
     # Step 3: Create Firestore job document
     job_doc_data = {

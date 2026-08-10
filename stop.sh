@@ -2,7 +2,7 @@
 
 PORT=${PORT:-8000}
 
-echo "Stopping any server running on port ${PORT} or uvicorn instances..."
+echo "Stopping any server running on port ${PORT}, uvicorn instances, or Celery workers..."
 
 # Find and kill process listening on port 8000
 PIDS=$(lsof -ti:${PORT})
@@ -18,4 +18,7 @@ fi
 # Kill any remaining uvicorn processes for this app
 pkill -f "uvicorn app.main:app" 2>/dev/null || true
 
-echo "AI Studio Backend stopped successfully."
+# Kill any remaining Celery worker processes
+pkill -9 -f "celery" 2>/dev/null || true
+
+echo "AI Studio Backend and Celery workers stopped successfully."

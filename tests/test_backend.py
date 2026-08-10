@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.config import settings
 from app.services.prompt_service import load_theme_prompt, STATIC_THEMES
+from app.workers.celery_worker import process_async_job, celery_app
 
 client = TestClient(app)
 
@@ -21,7 +22,7 @@ def test_static_theme_lookup():
     assert "Cyberpunk city" in preset["prompt"]
 
 def test_generate_job_schema_validation():
-    # Missing required params should return 422
+    # Missing required params should return 400
     response = client.post("/v1/generateJob", json={
         "jobType": "IMAGE_GEN",
         "tier": "FAST",
@@ -42,7 +43,6 @@ def test_webhook_endpoints_schema():
         "jobId": "non_existent_job",
         "outputUrl": "https://storage.googleapis.com/bucket/output.png"
     })
-    # Should attempt lookup and return 404 since job doesn't exist in Firestore
     assert completed_res.status_code == 404
 
     # Test job-failed webhook model
@@ -51,3 +51,6 @@ def test_webhook_endpoints_schema():
         "error": "GPU worker timeout"
     })
     assert failed_res.status_code == 404
+
+def test_celery_worker_task_registration():
+    assert "process_async_job" in celery_app.tasks

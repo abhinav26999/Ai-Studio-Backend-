@@ -14,12 +14,12 @@ class Settings(BaseSettings):
     HF_TOKEN: str = ""
     HF_ROUTER_URL: str = "https://router.huggingface.co/v1"
     QWEN_MODEL_ID: str = "Qwen/Qwen2.5-7B-Instruct"
+    BG_REMOVAL_MODEL_ID: str = "ZhengPeng7/BiRefNet-general"  # Options: "ZhengPeng7/BiRefNet-general" or "briaai/RMBG-2.0"
     
-    # Cloud Tasks Settings
-    GCP_PROJECT_ID: str = "ai-studio-637ab"
-    GCP_LOCATION: str = "us-central1"
-    GCP_TASKS_QUEUE: str = "image-gen-queue"
-    
+    # Redis & Celery Settings
+    REDIS_URL: str = "redis://localhost:6379/0"
+    ENABLE_CELERY: bool = True
+
     # Credit Costs Contract
     CREDIT_COST_IMAGE_GEN: int = 3
     CREDIT_COST_THEME_CHANGE: int = 3
