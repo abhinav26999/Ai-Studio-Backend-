@@ -27,15 +27,20 @@ def test_generate_job_schema_validation():
         "jobType": "IMAGE_GEN",
         "tier": "FAST",
         "params": {}
-    }, headers={"Authorization": "Bearer test_user_12345"})
+    }, headers={"authorization": "test_user_12345"})
     assert response.status_code == 400
 
-def test_wallet_endpoint():
-    response = client.get("/wallet/test_user_12345")
+def test_wallet_endpoint_auth_match():
+    # Same user ID in header and path should succeed
+    response = client.get("/wallet/test_user_12345", headers={"authorization": "test_user_12345"})
     assert response.status_code == 200
     data = response.json()
     assert "balance" in data
     assert data["userId"] == "test_user_12345"
+
+    # Mismatched user ID in header and path should return 403 Forbidden
+    forbidden_res = client.get("/wallet/another_user_999", headers={"authorization": "test_user_12345"})
+    assert forbidden_res.status_code == 403
 
 def test_webhook_endpoints_schema():
     # Test job-completed webhook model

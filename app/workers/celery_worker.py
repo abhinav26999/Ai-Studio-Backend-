@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime, timezone
 from celery import Celery
+from celery.exceptions import SoftTimeLimitExceeded
 from app.config import settings
 from app.db.firebase import get_db
 from app.services.wallet_service import refund_credits
@@ -24,15 +25,23 @@ celery_app.conf.update(
 def get_utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
-@celery_app.task(name="process_async_job", bind=True, max_retries=2, default_retry_delay=5)
+@celery_app.task(
+    name="process_async_job",
+    bind=True,
+    max_retries=2,
+    default_retry_delay=5,
+    time_limit=300,        # Hard time limit: 5 minutes
+    soft_time_limit=270    # Soft time limit: 4.5 minutes
+)
 def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str, payload_data: dict):
     """
     Celery Background Worker Task:
     1. Reads jobs/{jobId} from Firestore.
     2. Updates status to 'processing'.
     3. Executes AI generation/segmentation (FLUX.1 Schnell, BiRefNet, TripoSR).
-    4. Updates status to 'completed' with outputUrl/meshUrl in Firestore.
-    5. On error, updates status to 'error' and refunds deducted credits atomically.
+    4. Explicitly handles THEME_CHANGE, BG_REMOVAL, IMAGE_GEN, MESH_GEN.
+    5. Updates status to 'completed' with outputUrl/meshUrl in Firestore.
+    6. On error or timeout (SoftTimeLimitExceeded), updates status to 'error' and refunds credits.
     """
     logger.info(f"Celery worker processing job_id={job_id}, job_type={job_type}, user_id={user_id}")
     db = get_db()
@@ -42,6 +51,9 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
     if not job_doc.exists:
         logger.error(f"Job {job_id} not found in Firestore.")
         return {"success": False, "error": "Job not found"}
+
+    job_data = job_doc.to_dict()
+    cost = job_data.get("cost", 3)
 
     try:
         # Step 1: Update status to processing
@@ -63,8 +75,14 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
             output_filename = f"{job_id}_bg_removed.png"
             output_url = f"https://storage.googleapis.com/{bucket_name}/outputs/{user_id}/{output_filename}"
 
-        elif job_type in ["IMAGE_GEN", "THEME_CHANGE"]:
-            logger.info(f"Executing FLUX.1 Schnell Generation for {job_id}")
+        elif job_type == "THEME_CHANGE":
+            theme_id = params.get("themeId")
+            logger.info(f"Executing Theme Change (FLUX.1 Schnell) for themeId={theme_id}, jobId={job_id}")
+            output_filename = f"{job_id}_theme_{theme_id or 'preset'}.png"
+            output_url = f"https://storage.googleapis.com/{bucket_name}/outputs/{user_id}/{output_filename}"
+
+        elif job_type == "IMAGE_GEN":
+            logger.info(f"Executing FLUX.1 Schnell Custom Prompt Generation for {job_id}")
             output_filename = f"{job_id}_generated.png"
             output_url = f"https://storage.googleapis.com/{bucket_name}/outputs/{user_id}/{output_filename}"
 
@@ -88,11 +106,21 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
         logger.info(f"Celery task completed successfully for jobId={job_id}")
         return {"success": True, "jobId": job_id, "outputUrl": output_url, "meshUrl": mesh_url}
 
+    except SoftTimeLimitExceeded:
+        logger.error(f"Celery task execution timed out for jobId={job_id} (soft_time_limit exceeded)")
+        job_ref.update({
+            "status": "error",
+            "error": "Task execution timed out (4.5 min limit exceeded)",
+            "updatedAt": get_utc_now_iso()
+        })
+        try:
+            refund_credits(user_id=user_id, cost=cost, job_id=job_id, reason="Celery soft time limit timeout")
+        except Exception as refund_err:
+            logger.error(f"Failed to refund credits on timeout for jobId={job_id}: {str(refund_err)}")
+        return {"success": False, "jobId": job_id, "error": "Timeout"}
+
     except Exception as err:
         logger.error(f"Celery worker failed for jobId={job_id}: {str(err)}")
-        job_data = job_doc.to_dict()
-        cost = job_data.get("cost", 3)
-
         job_ref.update({
             "status": "error",
             "error": str(err),

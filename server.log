@@ -1,17 +1,23 @@
 INFO:     Will watch for changes in these directories: ['/Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [47862] using WatchFiles
-INFO:     Started server process [47865]
+INFO:     Started reloader process [50110] using WatchFiles
+INFO:     Started server process [50113]
 INFO:     Waiting for application startup.
-2026-08-10 18:20:03,132 - ai_studio - INFO - Initializing AI Studio Backend Services...
-2026-08-10 18:20:03,133 - app.db.firebase - INFO - Initializing Firebase Admin SDK using credentials file: /Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-/ai-studio-637ab-firebase-adminsdk-fbsvc-d51de0aebf.json
-2026-08-10 18:20:03,183 - ai_studio - INFO - Firebase Admin SDK initialized successfully for project: ai-studio-637ab
+2026-08-10 18:47:26,806 - ai_studio - INFO - Initializing AI Studio Backend Services...
+2026-08-10 18:47:26,806 - app.db.firebase - INFO - Initializing Firebase Admin SDK using credentials file: /Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-/ai-studio-637ab-firebase-adminsdk-fbsvc-d51de0aebf.json
+2026-08-10 18:47:26,857 - ai_studio - INFO - Firebase Admin SDK initialized successfully for project: ai-studio-637ab
 INFO:     Application startup complete.
-INFO:     127.0.0.1:62387 - "GET /health HTTP/1.1" 200 OK
-2026-08-10 18:20:09,223 - app.dependencies.auth - INFO - Using direct user_id/dev token in dev mode: 'lWxV9Cx98sRcXIdRMUTqxiVY24R2'
-2026-08-10 18:20:10,385 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_2afe08013505. New balance: 179
-2026-08-10 18:20:10,386 - app.services.prompt_service - INFO - Routing BG_REMOVAL job via static hardcoded segmentation prompt ($0 LLM cost)
-2026-08-10 18:20:10,553 - app.services.job_service - INFO - Created job doc job_2afe08013505 for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
-2026-08-10 18:20:10,681 - app.services.queue_service - INFO - Successfully enqueued job job_2afe08013505 to Celery / Redis queue (task_id=d6f880f8-e199-42c0-b006-72327670173d)
-INFO:     127.0.0.1:62394 - "POST /v1/generateJob HTTP/1.1" 201 Created
-INFO:     127.0.0.1:62413 - "GET /job/job_2afe08013505 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63314 - "GET /health HTTP/1.1" 200 OK
+2026-08-10 18:47:32,022 - app.dependencies.auth - INFO - Using direct user_id/dev token in dev mode: 'lWxV9Cx98sRcXIdRMUTqxiVY24R2'
+2026-08-10 18:47:33,142 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_3073d8fdf9cd. New balance: 176
+2026-08-10 18:47:33,143 - app.services.prompt_service - INFO - Routing job prompt via static Theme Preset Library (themeId=1)
+2026-08-10 18:47:33,291 - app.services.job_service - INFO - Created job doc job_3073d8fdf9cd for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
+2026-08-10 18:47:33,417 - app.services.queue_service - INFO - Successfully enqueued job job_3073d8fdf9cd to Celery / Redis queue (task_id=d78e568c-780f-45ef-a666-ccb66f6b59ca)
+INFO:     127.0.0.1:63320 - "POST /v1/generateJob HTTP/1.1" 201 Created
+INFO:     127.0.0.1:63334 - "GET /job/job_3073d8fdf9cd HTTP/1.1" 200 OK
+2026-08-10 18:47:45,995 - app.dependencies.auth - INFO - Using direct user_id/dev token in dev mode: 'lWxV9Cx98sRcXIdRMUTqxiVY24R2'
+INFO:     127.0.0.1:63336 - "GET /wallet/another_user_999 HTTP/1.1" 403 Forbidden
+2026-08-10 18:47:52,959 - app.dependencies.auth - INFO - Using direct user_id/dev token in dev mode: 'lWxV9Cx98sRcXIdRMUTqxiVY24R2'
+INFO:     127.0.0.1:63338 - "GET /wallet/lWxV9Cx98sRcXIdRMUTqxiVY24R2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63350 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63350 - "GET /openapi.json HTTP/1.1" 200 OK
