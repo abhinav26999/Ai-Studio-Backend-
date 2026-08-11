@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     HF_TOKEN: str = ""
     HF_ROUTER_URL: str = "https://router.huggingface.co/v1"
     QWEN_MODEL_ID: str = "Qwen/Qwen2.5-7B-Instruct"
-    BG_REMOVAL_MODEL_ID: str = "ZhengPeng7/BiRefNet-general"  # Options: "ZhengPeng7/BiRefNet-general" or "briaai/RMBG-2.0"
+    BG_REMOVAL_MODEL_ID: str = "briaai/RMBG-2.0"  # Options: "briaai/RMBG-2.0" or "briaai/RMBG-1.4"
     
     # Redis & Celery Settings
     REDIS_URL: str = "redis://localhost:6379/0"

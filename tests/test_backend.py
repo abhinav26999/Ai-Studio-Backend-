@@ -4,6 +4,7 @@ from app.main import app
 from app.config import settings
 from app.services.prompt_service import load_theme_prompt, STATIC_THEMES
 from app.workers.celery_worker import process_async_job, celery_app
+from app.services.image_processor import generate_placeholder_image
 
 client = TestClient(app)
 
@@ -59,3 +60,9 @@ def test_webhook_endpoints_schema():
 
 def test_celery_worker_task_registration():
     assert "process_async_job" in celery_app.tasks
+
+def test_local_image_processor():
+    png_bytes = generate_placeholder_image("Test Title", "Test Subtitle")
+    assert png_bytes is not None
+    assert len(png_bytes) > 1000
+    assert png_bytes.startswith(b"\x89PNG")

@@ -1,15 +1,18 @@
 import uuid
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import HTTPException
 from app.config import settings
-from app.db.firebase import get_db
+from app.db.firebase import get_db, firestore
 from app.models.job import JobType, GenerateJobRequest, JobDocument, JobStatus
 from app.services.wallet_service import check_and_deduct_credits
 from app.services.prompt_service import process_job_prompt
 from app.services.queue_service import enqueue_job_task
 
 logger = logging.getLogger(__name__)
+
+def get_utc_now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 def get_job_cost(job_type: JobType) -> int:
     """Map Fast Tier credit costs per contract."""
@@ -31,7 +34,7 @@ async def create_and_enqueue_job(user_id: str, request: GenerateJobRequest) -> d
     3. Perform atomic credit deduction.
     4. Process prompt (static lookup for themeId, Qwen 2.5 7B for userPrompt).
     5. Write jobs/{jobId} to Firestore.
-    6. Enqueue task for Cloud Run GPU processing.
+    6. Enqueue task for Celery / Redis GPU worker processing.
     7. Return immediately to caller.
     """
     if (
@@ -47,7 +50,7 @@ async def create_and_enqueue_job(user_id: str, request: GenerateJobRequest) -> d
 
     job_id = f"job_{uuid.uuid4().hex[:12]}"
     cost = get_job_cost(request.jobType)
-    created_at = datetime.utcnow().isoformat() + "Z"
+    created_at = get_utc_now_iso()
 
     # Step 1: Deduct credits atomically
     check_and_deduct_credits(user_id=user_id, cost=cost, job_id=job_id)
@@ -75,7 +78,7 @@ async def create_and_enqueue_job(user_id: str, request: GenerateJobRequest) -> d
     db.collection("jobs").document(job_id).set(job_doc_data)
     logger.info(f"Created job doc {job_id} for user {user_id} with cost {cost}")
 
-    # Step 4: Enqueue to Cloud Tasks
+    # Step 4: Enqueue task
     enqueue_job_task(
         job_id=job_id,
         user_id=user_id,
@@ -103,20 +106,19 @@ def get_job_by_id(job_id: str) -> dict:
     return doc.to_dict()
 
 def list_user_jobs(user_id: str, limit: int = 20, offset: int = 0) -> dict:
-    """Query user jobs from Firestore with pagination."""
+    """Query user jobs from Firestore with in-memory sorting to avoid composite index requirements."""
     db = get_db()
-    query = (
-        db.collection("jobs")
-        .where("userId", "==", user_id)
-        .order_by("createdAt", direction="DESCENDING")
-        .limit(limit)
-        .offset(offset)
-    )
+    query = db.collection("jobs").where(filter=firestore.FieldFilter("userId", "==", user_id))
     docs = query.stream()
     jobs_list = [doc.to_dict() for doc in docs]
+    jobs_list.sort(key=lambda x: x.get("createdAt", ""), reverse=True)
+    paginated_list = jobs_list[offset:offset+limit]
     return {
-        "jobs": jobs_list,
+        "jobs": paginated_list,
         "limit": limit,
         "offset": offset,
-        "count": len(jobs_list)
+        "count": len(paginated_list),
+        "total": len(jobs_list)
     }
+
+

@@ -27,9 +27,15 @@
 			"name": "2. Get Wallet Balance",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "authorization",
+						"value": "lWxV9Cx98sRcXIdRMUTqxiVY24R2",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://localhost:8000/wallet/3sGjpeGIzBgvI3izaqfHI1F3bAN2",
+					"raw": "http://localhost:8000/wallet/lWxV9Cx98sRcXIdRMUTqxiVY24R2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -37,7 +43,7 @@
 					"port": "8000",
 					"path": [
 						"wallet",
-						"3sGjpeGIzBgvI3izaqfHI1F3bAN2"
+						"lWxV9Cx98sRcXIdRMUTqxiVY24R2"
 					]
 				}
 			}
@@ -49,7 +55,7 @@
 				"header": [
 					{
 						"key": "authorization",
-						"value": "3sGjpeGIzBgvI3izaqfHI1F3bAN2",
+						"value": "lWxV9Cx98sRcXIdRMUTqxiVY24R2",
 						"type": "text"
 					},
 					{
@@ -82,7 +88,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/job/job_c41d11aa159e",
+					"raw": "http://localhost:8000/job/job_65582ffd6d3a",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -90,7 +96,7 @@
 					"port": "8000",
 					"path": [
 						"job",
-						"job_c41d11aa159e"
+						"job_65582ffd6d3a"
 					]
 				}
 			}
@@ -102,7 +108,7 @@
 				"header": [
 					{
 						"key": "authorization",
-						"value": "3sGjpeGIzBgvI3izaqfHI1F3bAN2",
+						"value": "lWxV9Cx98sRcXIdRMUTqxiVY24R2",
 						"type": "text"
 					}
 				],
@@ -115,6 +121,40 @@
 					"port": "8000",
 					"path": [
 						"jobs"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "20"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "6. List User Gallery Images",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "lWxV9Cx98sRcXIdRMUTqxiVY24R2",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/gallery?limit=20&offset=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"gallery"
 					],
 					"query": [
 						{
