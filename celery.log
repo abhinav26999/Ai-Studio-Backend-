@@ -1,10 +1,10 @@
  
  -------------- celery@Aeologics-MacBook-Pro-2.local v5.6.3 (recovery)
 --- ***** ----- 
--- ******* ---- macOS-26.5.2-x86_64-i386-64bit 2026-08-11 12:33:33
+-- ******* ---- macOS-26.5.2-x86_64-i386-64bit 2026-08-11 18:30:56
 - *** --- * --- 
 - ** ---------- [config]
-- ** ---------- .> app:         ai_studio_tasks:0x10d2ea4d0
+- ** ---------- .> app:         ai_studio_tasks:0x1046dcbd0
 - ** ---------- .> transport:   redis://localhost:6379/0
 - ** ---------- .> results:     redis://localhost:6379/0
 - *** --- * --- .> concurrency: 4 (thread)
@@ -17,74 +17,112 @@
 [tasks]
   . process_async_job
 
-[2026-08-11 12:33:33,377: INFO/MainProcess] Connected to redis://localhost:6379/0
-[2026-08-11 12:33:33,384: INFO/MainProcess] mingle: searching for neighbors
-[2026-08-11 12:33:34,396: INFO/MainProcess] mingle: all alone
-[2026-08-11 12:33:34,413: INFO/MainProcess] celery@Aeologics-MacBook-Pro-2.local ready.
-[2026-08-11 12:33:41,076: INFO/MainProcess] Task process_async_job[d1d80d7f-79b4-4677-988a-61ebcb390c8c] received
-[2026-08-11 12:33:41,077: INFO/MainProcess] Celery worker processing job_id=job_bab1882aae6a, job_type=BG_REMOVAL, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
-[2026-08-11 12:33:41,077: INFO/MainProcess] Initializing Firebase Admin SDK using credentials file: /Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-/ai-studio-637ab-firebase-adminsdk-fbsvc-d51de0aebf.json
-[2026-08-11 12:33:41,948: INFO/MainProcess] Executing BiRefNet / RMBG-2.0 Background Removal for job_bab1882aae6a
-[2026-08-11 12:33:41,948: INFO/MainProcess] Downloading source image for universal BG removal from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786431076159.jpg?alt=media&token=7068bd00-56bb-4259-9c89-b54afa41f38f
-[2026-08-11 12:33:44,711: INFO/MainProcess] HTTP Request: GET https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786431076159.jpg?alt=media&token=7068bd00-56bb-4259-9c89-b54afa41f38f "HTTP/1.1 200 OK"
-[2026-08-11 12:33:45,390: INFO/MainProcess] Executing Universal SOTA AI Background Removal (U2Net ONNX Engine)...
-[2026-08-11 12:33:45,390: INFO/MainProcess] Initializing ONNX Runtime Session using model at: /Users/aeologicbuddy/.u2net/u2net.onnx
-[2026-08-11 12:33:46,894: INFO/MainProcess] Successfully generated universal pixel-exact transparent PNG (798611 bytes)
-[2026-08-11 12:33:49,455: INFO/MainProcess] Successfully uploaded physical blob file (798611 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_bab1882aae6a/bg_removed.png
-[2026-08-11 12:33:49,858: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_bab1882aae6a'
-[2026-08-11 12:33:49,859: INFO/MainProcess] Celery task completed successfully for jobId=job_bab1882aae6a
-[2026-08-11 12:33:49,870: INFO/MainProcess] Task process_async_job[d1d80d7f-79b4-4677-988a-61ebcb390c8c] succeeded in 8.793657041998813s: {'success': True, 'jobId': 'job_bab1882aae6a', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_bab1882aae6a/bg_removed.png', 'meshUrl': None}
-[2026-08-11 13:00:03,320: INFO/MainProcess] Task process_async_job[854f3057-9b2d-4cef-9d8a-ab92196a02b4] received
-[2026-08-11 13:00:03,327: INFO/MainProcess] Celery worker processing job_id=job_fef3074d00a6, job_type=BG_REMOVAL, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
-[2026-08-11 13:00:04,010: INFO/MainProcess] Executing BiRefNet / RMBG-2.0 Background Removal for job_fef3074d00a6
-[2026-08-11 13:00:04,010: INFO/MainProcess] Downloading source image for universal BG removal from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786433392134.jpg?alt=media&token=a551e1ab-6f44-4779-a1f6-79dd8667d7dd
-[2026-08-11 13:00:05,216: INFO/MainProcess] HTTP Request: GET https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786433392134.jpg?alt=media&token=a551e1ab-6f44-4779-a1f6-79dd8667d7dd "HTTP/1.1 200 OK"
-[2026-08-11 13:00:05,591: INFO/MainProcess] Executing Universal SOTA AI Background Removal (U2Net ONNX Engine)...
-[2026-08-11 13:00:06,534: INFO/MainProcess] Successfully generated universal pixel-exact transparent PNG (798611 bytes)
-[2026-08-11 13:00:10,414: INFO/MainProcess] Successfully uploaded physical blob file (798611 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_fef3074d00a6/bg_removed.png
-[2026-08-11 13:00:10,692: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_fef3074d00a6'
-[2026-08-11 13:00:10,692: INFO/MainProcess] Celery task completed successfully for jobId=job_fef3074d00a6
-[2026-08-11 13:00:10,695: INFO/MainProcess] Task process_async_job[854f3057-9b2d-4cef-9d8a-ab92196a02b4] succeeded in 7.368948098999681s: {'success': True, 'jobId': 'job_fef3074d00a6', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_fef3074d00a6/bg_removed.png', 'meshUrl': None}
-[2026-08-11 13:06:00,273: INFO/MainProcess] Task process_async_job[5f963b82-b4e2-46c6-98ba-8dd52c4ec0a8] received
-[2026-08-11 13:06:00,275: INFO/MainProcess] Celery worker processing job_id=job_8f18889bfd2f, job_type=BG_REMOVAL, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
-[2026-08-11 13:06:00,957: INFO/MainProcess] Executing BiRefNet / RMBG-2.0 Background Removal for job_8f18889bfd2f
-[2026-08-11 13:06:00,957: INFO/MainProcess] Downloading source image for universal BG removal from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786433751312.jpg?alt=media&token=1c4a3941-f84e-40e0-8970-55af482f5974
-[2026-08-11 13:06:03,486: INFO/MainProcess] HTTP Request: GET https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786433751312.jpg?alt=media&token=1c4a3941-f84e-40e0-8970-55af482f5974 "HTTP/1.1 200 OK"
-[2026-08-11 13:06:03,875: INFO/MainProcess] Executing Universal SOTA AI Background Removal (U2Net ONNX Engine)...
-[2026-08-11 13:06:04,539: INFO/MainProcess] Successfully generated universal pixel-exact transparent PNG (798611 bytes)
-[2026-08-11 13:06:08,633: INFO/MainProcess] Successfully uploaded physical blob file (798611 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_8f18889bfd2f/bg_removed.png
-[2026-08-11 13:06:09,069: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_8f18889bfd2f'
-[2026-08-11 13:06:09,069: INFO/MainProcess] Celery task completed successfully for jobId=job_8f18889bfd2f
-[2026-08-11 13:06:09,070: INFO/MainProcess] Task process_async_job[5f963b82-b4e2-46c6-98ba-8dd52c4ec0a8] succeeded in 8.794913572986843s: {'success': True, 'jobId': 'job_8f18889bfd2f', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_8f18889bfd2f/bg_removed.png', 'meshUrl': None}
-[2026-08-11 14:18:23,469: INFO/MainProcess] Task process_async_job[8f0e5441-b460-4049-954e-47f7757ed07b] received
-[2026-08-11 14:18:23,471: INFO/MainProcess] Celery worker processing job_id=job_783b3859f6fc, job_type=BG_REMOVAL, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
-[2026-08-11 14:18:23,821: INFO/MainProcess] Executing BiRefNet / RMBG-2.0 Background Removal for job_783b3859f6fc
-[2026-08-11 14:18:23,821: INFO/MainProcess] Downloading source image for universal BG removal from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786438095231.jpg?alt=media&token=db956cce-54a6-4d77-93d6-5732369085ff
-[2026-08-11 14:18:26,100: INFO/MainProcess] HTTP Request: GET https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786438095231.jpg?alt=media&token=db956cce-54a6-4d77-93d6-5732369085ff "HTTP/1.1 200 OK"
-[2026-08-11 14:18:26,483: INFO/MainProcess] Executing Universal SOTA AI Background Removal (U2Net ONNX Engine)...
-[2026-08-11 14:18:27,158: INFO/MainProcess] Successfully generated universal pixel-exact transparent PNG (798611 bytes)
-[2026-08-11 14:18:31,494: INFO/MainProcess] Successfully uploaded physical blob file (798611 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_783b3859f6fc/bg_removed.png
-[2026-08-11 14:18:31,586: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_783b3859f6fc'
-[2026-08-11 14:18:31,586: INFO/MainProcess] Celery task completed successfully for jobId=job_783b3859f6fc
-[2026-08-11 14:18:31,590: INFO/MainProcess] Task process_async_job[8f0e5441-b460-4049-954e-47f7757ed07b] succeeded in 8.118229949992383s: {'success': True, 'jobId': 'job_783b3859f6fc', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_783b3859f6fc/bg_removed.png', 'meshUrl': None}
-[2026-08-11 14:30:05,226: INFO/MainProcess] Task process_async_job[94ede4a9-aeee-43d7-a84f-7df246e97f6e] received
-[2026-08-11 14:30:05,228: INFO/MainProcess] Celery worker processing job_id=job_994483ed8c04, job_type=IMAGE_GEN, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
-[2026-08-11 14:30:05,367: INFO/MainProcess] Executing FLUX.1 Schnell Custom Prompt Generation for job_994483ed8c04
-[2026-08-11 14:30:06,032: INFO/MainProcess] Successfully uploaded physical blob file (7618 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_994483ed8c04/generated.png
-[2026-08-11 14:30:06,103: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_994483ed8c04'
-[2026-08-11 14:30:06,104: INFO/MainProcess] Celery task completed successfully for jobId=job_994483ed8c04
-[2026-08-11 14:30:06,105: INFO/MainProcess] Task process_async_job[94ede4a9-aeee-43d7-a84f-7df246e97f6e] succeeded in 0.8767935349897016s: {'success': True, 'jobId': 'job_994483ed8c04', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_994483ed8c04/generated.png', 'meshUrl': None}
-[2026-08-11 14:30:41,412: INFO/MainProcess] Task process_async_job[755306bc-ebfb-4117-89b8-cf4c97a2701b] received
-[2026-08-11 14:30:41,413: INFO/MainProcess] Celery worker processing job_id=job_5fb4c65cb56d, job_type=MESH_GEN, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
-[2026-08-11 14:30:41,502: INFO/MainProcess] Executing TripoSR / Stable Fast 3D Mesh Generation for job_5fb4c65cb56d
-[2026-08-11 14:30:41,901: INFO/MainProcess] Successfully uploaded physical blob file (11 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_5fb4c65cb56d/mesh.glb
-[2026-08-11 14:30:41,964: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_5fb4c65cb56d'
-[2026-08-11 14:30:41,964: INFO/MainProcess] Celery task completed successfully for jobId=job_5fb4c65cb56d
-[2026-08-11 14:30:41,966: INFO/MainProcess] Task process_async_job[755306bc-ebfb-4117-89b8-cf4c97a2701b] succeeded in 0.553235950996168s: {'success': True, 'jobId': 'job_5fb4c65cb56d', 'outputUrl': None, 'meshUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_5fb4c65cb56d/mesh.glb'}
-[2026-08-11 14:31:09,730: INFO/MainProcess] Task process_async_job[a65ea412-b05e-4ee9-a84c-ac466d7889ae] received
-[2026-08-11 14:31:09,731: INFO/MainProcess] Celery worker processing job_id=job_46d3b86c03d1, job_type=THEME_CHANGE, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
-[2026-08-11 14:31:09,776: INFO/MainProcess] Executing Theme Change for themeId=None, jobId=job_46d3b86c03d1
-[2026-08-11 14:31:10,243: INFO/MainProcess] Successfully uploaded physical blob file (7535 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_46d3b86c03d1/theme_preset.png
-[2026-08-11 14:31:10,309: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_46d3b86c03d1'
-[2026-08-11 14:31:10,310: INFO/MainProcess] Celery task completed successfully for jobId=job_46d3b86c03d1
-[2026-08-11 14:31:10,315: INFO/MainProcess] Task process_async_job[a65ea412-b05e-4ee9-a84c-ac466d7889ae] succeeded in 0.5847421700018458s: {'success': True, 'jobId': 'job_46d3b86c03d1', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_46d3b86c03d1/theme_preset.png', 'meshUrl': None}
+[2026-08-11 18:30:57,042: INFO/MainProcess] Connected to redis://localhost:6379/0
+[2026-08-11 18:30:57,047: INFO/MainProcess] mingle: searching for neighbors
+[2026-08-11 18:30:58,060: INFO/MainProcess] mingle: all alone
+[2026-08-11 18:30:58,080: INFO/MainProcess] celery@Aeologics-MacBook-Pro-2.local ready.
+[2026-08-11 18:31:12,279: INFO/MainProcess] Task process_async_job[7d70c2eb-a8b8-4b14-aecd-8ee040317597] received
+[2026-08-11 18:31:12,280: INFO/MainProcess] Celery worker processing job_id=job_eddd647b7137, job_type=IMAGE_GEN, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-11 18:31:12,281: INFO/MainProcess] Initializing Firebase Admin SDK using credentials file: /Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-/ai-studio-637ab-firebase-adminsdk-fbsvc-d51de0aebf.json
+[2026-08-11 18:31:13,110: INFO/MainProcess] Executing IMAGE_GEN for prompt='a detailed scene with a dark green background, lus', input_image_url=True, jobId=job_eddd647b7137
+[2026-08-11 18:31:13,111: INFO/MainProcess] Downloading source image for image editing from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786452997238.jpg?alt=media&token=1a5cc65f-b948-44d4-bb6e-1d9eed2c6932
+[2026-08-11 18:31:13,615: INFO/MainProcess] Downloaded image bytes directly via Firebase Storage SDK for: user_inputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/1786452997238.jpg
+[2026-08-11 18:31:15,824: INFO/MainProcess] Prompt 'a detailed scene with a dark green background, lush and vibrant greenery filling the space, strong focus on the green tones' detected as Background/Wall Recolor. Routing to Wall Recoloring Engine...
+[2026-08-11 18:31:15,824: INFO/MainProcess] Executing Background/Wall Recoloring for prompt: 'a detailed scene with a dark green background, lush and vibrant greenery filling the space, strong focus on the green tones'...
+[2026-08-11 18:31:15,869: INFO/MainProcess] Initializing ONNX Runtime Session using model at: /Users/aeologicbuddy/.u2net/u2net.onnx
+[2026-08-11 18:31:17,562: INFO/MainProcess] Parsed target wall color '60' with modifier 'dark' for prompt: 'a detailed scene with a dark green background, lush and vibrant greenery filling the space, strong focus on the green tones'
+[2026-08-11 18:31:17,663: INFO/MainProcess] Successfully generated background wall recolored image (557298 bytes)
+[2026-08-11 18:31:19,708: INFO/MainProcess] Successfully uploaded physical blob file (557298 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_eddd647b7137/generated.png
+[2026-08-11 18:31:19,990: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_eddd647b7137'
+[2026-08-11 18:31:19,990: INFO/MainProcess] Celery task completed successfully for jobId=job_eddd647b7137
+[2026-08-11 18:31:20,005: INFO/MainProcess] Task process_async_job[7d70c2eb-a8b8-4b14-aecd-8ee040317597] succeeded in 7.724932291021105s: {'success': True, 'jobId': 'job_eddd647b7137', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_eddd647b7137/generated.png', 'meshUrl': None}
+[2026-08-11 18:31:44,521: INFO/MainProcess] Task process_async_job[24de1022-ea74-405c-88c1-efa8157b2dbd] received
+[2026-08-11 18:31:44,521: INFO/MainProcess] Celery worker processing job_id=job_9fa12f4401a9, job_type=IMAGE_GEN, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-11 18:31:45,422: INFO/MainProcess] Executing IMAGE_GEN for prompt='Change the wall color to dark green', input_image_url=True, jobId=job_9fa12f4401a9
+[2026-08-11 18:31:45,422: INFO/MainProcess] Downloading source image for image editing from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786452997238.jpg?alt=media&token=1a5cc65f-b948-44d4-bb6e-1d9eed2c6932
+[2026-08-11 18:31:45,758: INFO/MainProcess] Downloaded image bytes directly via Firebase Storage SDK for: user_inputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/1786452997238.jpg
+[2026-08-11 18:31:48,024: INFO/MainProcess] Prompt 'Change the wall color to dark green' detected as Background/Wall Recolor. Routing to Wall Recoloring Engine...
+[2026-08-11 18:31:48,024: INFO/MainProcess] Executing Background/Wall Recoloring for prompt: 'Change the wall color to dark green'...
+[2026-08-11 18:31:48,622: INFO/MainProcess] Parsed target wall color '60' with modifier 'dark' for prompt: 'Change the wall color to dark green'
+[2026-08-11 18:31:48,717: INFO/MainProcess] Successfully generated background wall recolored image (557298 bytes)
+[2026-08-11 18:31:50,797: INFO/MainProcess] Successfully uploaded physical blob file (557298 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_9fa12f4401a9/generated.png
+[2026-08-11 18:31:51,080: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_9fa12f4401a9'
+[2026-08-11 18:31:51,081: INFO/MainProcess] Celery task completed successfully for jobId=job_9fa12f4401a9
+[2026-08-11 18:31:51,082: INFO/MainProcess] Task process_async_job[24de1022-ea74-405c-88c1-efa8157b2dbd] succeeded in 6.560601628007134s: {'success': True, 'jobId': 'job_9fa12f4401a9', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_9fa12f4401a9/generated.png', 'meshUrl': None}
+[2026-08-11 18:38:54,285: INFO/MainProcess] Task process_async_job[f97dc175-a562-4ede-a47b-701bd28be72c] received
+[2026-08-11 18:38:54,288: INFO/MainProcess] Celery worker processing job_id=job_99db504d0c9b, job_type=MESH_GEN, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-11 18:38:54,400: INFO/MainProcess] Executing TripoSR / Stable Fast 3D Mesh Generation for job_99db504d0c9b
+[2026-08-11 18:38:56,293: INFO/MainProcess] Successfully uploaded physical blob file (11 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_99db504d0c9b/mesh.glb
+[2026-08-11 18:38:56,360: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_99db504d0c9b'
+[2026-08-11 18:38:56,360: INFO/MainProcess] Celery task completed successfully for jobId=job_99db504d0c9b
+[2026-08-11 18:38:56,362: INFO/MainProcess] Task process_async_job[f97dc175-a562-4ede-a47b-701bd28be72c] succeeded in 2.07381032401463s: {'success': True, 'jobId': 'job_99db504d0c9b', 'outputUrl': None, 'meshUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_99db504d0c9b/mesh.glb'}
+[2026-08-11 18:39:08,098: INFO/MainProcess] Task process_async_job[8d6dea55-ca93-40be-ae5e-6f15f76e22c1] received
+[2026-08-11 18:39:08,099: INFO/MainProcess] Celery worker processing job_id=job_d08c1b18acaf, job_type=THEME_CHANGE, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-11 18:39:08,160: INFO/MainProcess] Executing Theme Change for themeId=None, input_image_url=True, jobId=job_d08c1b18acaf
+[2026-08-11 18:39:08,161: INFO/MainProcess] Downloading source image for theme recoloring from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786452997238.jpg?alt=media&token=1a5cc65f-b948-44d4-bb6e-1d9eed2c6932
+[2026-08-11 18:39:08,502: INFO/MainProcess] Downloaded image bytes directly via Firebase Storage SDK for: user_inputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/1786452997238.jpg
+[2026-08-11 18:39:10,858: INFO/MainProcess] Successfully generated theme-recolored image (934716 bytes)
+[2026-08-11 18:39:13,267: INFO/MainProcess] Successfully uploaded physical blob file (934716 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_d08c1b18acaf/theme_preset.png
+[2026-08-11 18:39:13,324: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_d08c1b18acaf'
+[2026-08-11 18:39:13,324: INFO/MainProcess] Celery task completed successfully for jobId=job_d08c1b18acaf
+[2026-08-11 18:39:13,326: INFO/MainProcess] Task process_async_job[8d6dea55-ca93-40be-ae5e-6f15f76e22c1] succeeded in 5.227148693986237s: {'success': True, 'jobId': 'job_d08c1b18acaf', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_d08c1b18acaf/theme_preset.png', 'meshUrl': None}
+[2026-08-11 18:39:29,093: INFO/MainProcess] Task process_async_job[5349f293-2547-4990-ba21-05eba532f07c] received
+[2026-08-11 18:39:29,094: INFO/MainProcess] Celery worker processing job_id=job_165a4e6fe2fd, job_type=THEME_CHANGE, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-11 18:39:29,155: INFO/MainProcess] Executing Theme Change for themeId=2, input_image_url=True, jobId=job_165a4e6fe2fd
+[2026-08-11 18:39:29,156: INFO/MainProcess] Downloading source image for theme recoloring from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786452997238.jpg?alt=media&token=1a5cc65f-b948-44d4-bb6e-1d9eed2c6932
+[2026-08-11 18:39:29,513: INFO/MainProcess] Downloaded image bytes directly via Firebase Storage SDK for: user_inputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/1786452997238.jpg
+[2026-08-11 18:39:31,847: INFO/MainProcess] Successfully generated theme-recolored image (898245 bytes)
+[2026-08-11 18:39:34,295: INFO/MainProcess] Successfully uploaded physical blob file (898245 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_165a4e6fe2fd/theme_2.png
+[2026-08-11 18:39:34,342: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_165a4e6fe2fd'
+[2026-08-11 18:39:34,342: INFO/MainProcess] Celery task completed successfully for jobId=job_165a4e6fe2fd
+[2026-08-11 18:39:34,343: INFO/MainProcess] Task process_async_job[5349f293-2547-4990-ba21-05eba532f07c] succeeded in 5.24952945599216s: {'success': True, 'jobId': 'job_165a4e6fe2fd', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_165a4e6fe2fd/theme_2.png', 'meshUrl': None}
+[2026-08-11 18:39:48,943: INFO/MainProcess] Task process_async_job[747bcd1b-ecfb-4320-9757-85c0b66ab431] received
+[2026-08-11 18:39:48,944: INFO/MainProcess] Celery worker processing job_id=job_3cea3a93eb64, job_type=THEME_CHANGE, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-11 18:39:48,981: INFO/MainProcess] Executing Theme Change for themeId=3, input_image_url=True, jobId=job_3cea3a93eb64
+[2026-08-11 18:39:48,981: INFO/MainProcess] Downloading source image for theme recoloring from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786452997238.jpg?alt=media&token=1a5cc65f-b948-44d4-bb6e-1d9eed2c6932
+[2026-08-11 18:39:49,315: INFO/MainProcess] Downloaded image bytes directly via Firebase Storage SDK for: user_inputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/1786452997238.jpg
+[2026-08-11 18:39:51,696: INFO/MainProcess] Successfully generated theme-recolored image (927424 bytes)
+[2026-08-11 18:39:54,053: INFO/MainProcess] Successfully uploaded physical blob file (927424 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_3cea3a93eb64/theme_3.png
+[2026-08-11 18:39:54,118: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_3cea3a93eb64'
+[2026-08-11 18:39:54,118: INFO/MainProcess] Celery task completed successfully for jobId=job_3cea3a93eb64
+[2026-08-11 18:39:54,119: INFO/MainProcess] Task process_async_job[747bcd1b-ecfb-4320-9757-85c0b66ab431] succeeded in 5.175035614985973s: {'success': True, 'jobId': 'job_3cea3a93eb64', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_3cea3a93eb64/theme_3.png', 'meshUrl': None}
+[2026-08-11 18:40:07,599: INFO/MainProcess] Task process_async_job[171d5cb3-c727-403e-b7b9-69a90c4318ab] received
+[2026-08-11 18:40:07,599: INFO/MainProcess] Celery worker processing job_id=job_ed18e3fd8201, job_type=BG_REMOVAL, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-11 18:40:07,639: INFO/MainProcess] Executing BiRefNet / U2Net Background Removal for job_ed18e3fd8201
+[2026-08-11 18:40:07,639: INFO/MainProcess] Downloading source image for universal BG removal from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786452997238.jpg?alt=media&token=1a5cc65f-b948-44d4-bb6e-1d9eed2c6932
+[2026-08-11 18:40:07,980: INFO/MainProcess] Downloaded image bytes directly via Firebase Storage SDK for: user_inputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/1786452997238.jpg
+[2026-08-11 18:40:10,263: INFO/MainProcess] Executing Universal SOTA AI Background Removal (U2Net ONNX Engine)...
+[2026-08-11 18:40:10,753: INFO/MainProcess] Successfully generated universal pixel-exact transparent PNG (955828 bytes)
+[2026-08-11 18:40:13,175: INFO/MainProcess] Successfully uploaded physical blob file (955828 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_ed18e3fd8201/bg_removed.png
+[2026-08-11 18:40:13,230: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_ed18e3fd8201'
+[2026-08-11 18:40:13,230: INFO/MainProcess] Celery task completed successfully for jobId=job_ed18e3fd8201
+[2026-08-11 18:40:13,232: INFO/MainProcess] Task process_async_job[171d5cb3-c727-403e-b7b9-69a90c4318ab] succeeded in 5.632168704003561s: {'success': True, 'jobId': 'job_ed18e3fd8201', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_ed18e3fd8201/bg_removed.png', 'meshUrl': None}
+[2026-08-11 18:57:50,350: INFO/MainProcess] Task process_async_job[32249032-9959-4780-bd7a-76e0d97830d6] received
+[2026-08-11 18:57:50,354: INFO/MainProcess] Celery worker processing job_id=job_350ae622b754, job_type=MESH_GEN, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-11 18:57:50,939: INFO/MainProcess] Executing TripoSR / Stable Fast 3D Mesh Generation for job_350ae622b754
+[2026-08-11 18:57:51,547: INFO/MainProcess] Successfully uploaded physical blob file (11 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_350ae622b754/mesh.glb
+[2026-08-11 18:57:51,811: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_350ae622b754'
+[2026-08-11 18:57:51,811: INFO/MainProcess] Celery task completed successfully for jobId=job_350ae622b754
+[2026-08-11 18:57:51,813: INFO/MainProcess] Task process_async_job[32249032-9959-4780-bd7a-76e0d97830d6] succeeded in 1.4588775140000507s: {'success': True, 'jobId': 'job_350ae622b754', 'outputUrl': None, 'meshUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_350ae622b754/mesh.glb'}
+[2026-08-11 18:58:31,096: INFO/MainProcess] Task process_async_job[b07d7c04-83b8-49ad-a41e-a6202b1b5e3c] received
+[2026-08-11 18:58:31,097: INFO/MainProcess] Celery worker processing job_id=job_a2f04a094cb2, job_type=BG_REMOVAL, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-11 18:58:31,495: INFO/MainProcess] Executing BiRefNet / U2Net Background Removal for job_a2f04a094cb2
+[2026-08-11 18:58:31,495: INFO/MainProcess] Downloading source image for universal BG removal from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786454824875.jpg?alt=media&token=455713bd-f206-4564-b58f-eca7d0da583b
+[2026-08-11 18:58:31,874: INFO/MainProcess] Downloaded image bytes directly via Firebase Storage SDK for: user_inputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/1786454824875.jpg
+[2026-08-11 18:58:34,603: INFO/MainProcess] Executing Universal SOTA AI Background Removal (U2Net ONNX Engine)...
+[2026-08-11 18:58:35,250: INFO/MainProcess] Successfully generated universal pixel-exact transparent PNG (1791022 bytes)
+[2026-08-11 18:58:38,017: INFO/MainProcess] Successfully uploaded physical blob file (1791022 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_a2f04a094cb2/bg_removed.png
+[2026-08-11 18:58:38,282: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_a2f04a094cb2'
+[2026-08-11 18:58:38,282: INFO/MainProcess] Celery task completed successfully for jobId=job_a2f04a094cb2
+[2026-08-11 18:58:38,284: INFO/MainProcess] Task process_async_job[b07d7c04-83b8-49ad-a41e-a6202b1b5e3c] succeeded in 7.186457796022296s: {'success': True, 'jobId': 'job_a2f04a094cb2', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_a2f04a094cb2/bg_removed.png', 'meshUrl': None}
+[2026-08-11 18:59:21,014: INFO/MainProcess] Task process_async_job[7b003da1-4771-464c-a47e-1006d289f7d3] received
+[2026-08-11 18:59:21,016: INFO/MainProcess] Celery worker processing job_id=job_acf6a12f637e, job_type=BG_REMOVAL, user_id=lWxV9Cx98sRcXIdRMUTqxiVY24R2
+[2026-08-11 18:59:21,275: INFO/MainProcess] Executing BiRefNet / U2Net Background Removal for job_acf6a12f637e
+[2026-08-11 18:59:21,275: INFO/MainProcess] Downloading source image for universal BG removal from: https://firebasestorage.googleapis.com/v0/b/ai-studio-637ab.firebasestorage.app/o/user_inputs%2FlWxV9Cx98sRcXIdRMUTqxiVY24R2%2F1786454954167.jpg?alt=media&token=fe6832eb-cd25-4b45-94c6-01c35a711913
+[2026-08-11 18:59:21,624: INFO/MainProcess] Downloaded image bytes directly via Firebase Storage SDK for: user_inputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/1786454954167.jpg
+[2026-08-11 18:59:24,715: INFO/MainProcess] Executing Universal SOTA AI Background Removal (U2Net ONNX Engine)...
+[2026-08-11 18:59:25,860: INFO/MainProcess] Successfully generated universal pixel-exact transparent PNG (3365059 bytes)
+[2026-08-11 18:59:29,006: INFO/MainProcess] Successfully uploaded physical blob file (3365059 bytes) to Firebase Storage at: outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_acf6a12f637e/bg_removed.png
+[2026-08-11 18:59:29,226: INFO/MainProcess] Created gallery item in Firestore 'gallery/job_acf6a12f637e'
+[2026-08-11 18:59:29,226: INFO/MainProcess] Celery task completed successfully for jobId=job_acf6a12f637e
+[2026-08-11 18:59:29,228: INFO/MainProcess] Task process_async_job[7b003da1-4771-464c-a47e-1006d289f7d3] succeeded in 8.211979919986334s: {'success': True, 'jobId': 'job_acf6a12f637e', 'outputUrl': 'https://storage.googleapis.com/ai-studio-637ab.firebasestorage.app/outputs/lWxV9Cx98sRcXIdRMUTqxiVY24R2/job_acf6a12f637e/bg_removed.png', 'meshUrl': None}

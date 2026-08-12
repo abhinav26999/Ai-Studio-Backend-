@@ -6,7 +6,8 @@ from firebase_admin import storage
 from app.config import settings
 from app.db.firebase import get_db
 from app.services.wallet_service import refund_credits
-from app.services.image_processor import perform_real_bg_removal, generate_placeholder_image
+from app.services.image_processor import perform_real_bg_removal, generate_image_flux, generate_placeholder_image
+from app.services.image_editor import perform_image_editing, perform_theme_recoloring
 
 logger = logging.getLogger(__name__)
 
@@ -56,33 +57,38 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
     Celery Background Worker Task:
     1. Reads jobs/{jobId} from Firestore.
     2. Updates status to 'processing'.
-    3. Executes AI generation/segmentation (FLUX.1 Schnell, BiRefNet, TripoSR).
+    3. Executes AI generation/segmentation/editing.
     4. Saves output blob into Firebase Storage under outputs/{userId}/{jobId}/...
     5. Writes completed item into Firestore 'gallery' collection.
-    6. Updates status to 'completed' with outputUrl/meshUrl in Firestore.
+    6. Updates status to 'completed' with outputUrl/meshUrl in Firestore using set(merge=True).
     7. On error or timeout (SoftTimeLimitExceeded), updates status to 'error' and refunds credits.
     """
     logger.info(f"Celery worker processing job_id={job_id}, job_type={job_type}, user_id={user_id}")
     db = get_db()
     job_ref = db.collection("jobs").document(job_id)
-    job_doc = job_ref.get()
 
-    if not job_doc.exists:
-        logger.error(f"Job {job_id} not found in Firestore.")
-        return {"success": False, "error": "Job not found"}
-
-    job_data = job_doc.to_dict()
-    cost = job_data.get("cost", 3)
+    # Use set(merge=True) to guarantee safe upsert without 404 NotFound errors
+    cost = 3
+    try:
+        job_doc = job_ref.get()
+        if job_doc.exists:
+            cost = job_doc.to_dict().get("cost", 3)
+    except Exception:
+        pass
 
     try:
         # Step 1: Update status to processing
-        job_ref.update({
+        job_ref.set({
+            "jobId": job_id,
+            "userId": user_id,
+            "jobType": job_type,
+            "tier": tier,
             "status": "processing",
             "updatedAt": get_utc_now_iso()
-        })
+        }, merge=True)
 
-        params = payload_data.get("params", {})
-        processed_prompt = payload_data.get("processedPrompt", {})
+        params = payload_data.get("params", {}) if isinstance(payload_data, dict) else {}
+        processed_prompt = payload_data.get("processedPrompt", {}) if isinstance(payload_data, dict) else {}
         input_image_url = params.get("imageUrl")
         bucket_name = settings.FIREBASE_STORAGE_BUCKET
 
@@ -90,7 +96,7 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
         mesh_url = None
 
         if job_type == "BG_REMOVAL":
-            logger.info(f"Executing BiRefNet / RMBG-2.0 Background Removal for {job_id}")
+            logger.info(f"Executing BiRefNet / U2Net Background Removal for {job_id}")
             if input_image_url:
                 bg_png_bytes = perform_real_bg_removal(input_image_url)
             else:
@@ -107,8 +113,14 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
         elif job_type == "THEME_CHANGE":
             theme_id = params.get("themeId")
             theme_name = processed_prompt.get("name", f"Theme #{theme_id}") if isinstance(processed_prompt, dict) else f"Theme #{theme_id}"
-            logger.info(f"Executing Theme Change for themeId={theme_id}, jobId={job_id}")
-            theme_png_bytes = generate_placeholder_image(f"Theme: {theme_name}", "AI Studio Generated Preset Style")
+            prompt_str = processed_prompt.get("prompt", "High-resolution studio portrait, highly detailed") if isinstance(processed_prompt, dict) else "High-resolution theme portrait"
+
+            logger.info(f"Executing Theme Change for themeId={theme_id}, input_image_url={input_image_url is not None}, jobId={job_id}")
+            
+            if input_image_url:
+                theme_png_bytes = perform_theme_recoloring(input_image_url, theme_id=theme_id or 1, prompt=prompt_str)
+            else:
+                theme_png_bytes = generate_image_flux(prompt_str, title=f"Theme: {theme_name}")
 
             output_url = upload_output_file_to_storage(
                 user_id=user_id,
@@ -119,8 +131,17 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
             )
 
         elif job_type == "IMAGE_GEN":
-            logger.info(f"Executing FLUX.1 Schnell Custom Prompt Generation for {job_id}")
-            gen_png_bytes = generate_placeholder_image("FLUX.1 Schnell Render", "High-Resolution AI Output")
+            user_prompt = params.get("userPrompt", "")
+            prompt_str = processed_prompt.get("prompt", user_prompt) if isinstance(processed_prompt, dict) and processed_prompt.get("prompt") else user_prompt
+            if not prompt_str:
+                prompt_str = "A stunning cinematic masterpiece, highly detailed, 8k resolution"
+
+            logger.info(f"Executing IMAGE_GEN for prompt='{prompt_str[:50]}', input_image_url={input_image_url is not None}, jobId={job_id}")
+
+            if input_image_url:
+                gen_png_bytes = perform_image_editing(input_image_url, prompt=prompt_str)
+            else:
+                gen_png_bytes = generate_image_flux(prompt_str, title="FLUX.1 Schnell Render")
 
             output_url = upload_output_file_to_storage(
                 user_id=user_id,
@@ -140,7 +161,7 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
                 content_type="model/gltf-binary"
             )
 
-        # Step 2: Update Firestore jobs doc on completion
+        # Step 2: Update Firestore jobs doc on completion using merge=True
         update_data = {
             "status": "completed",
             "error": None,
@@ -151,7 +172,7 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
         if mesh_url:
             update_data["meshUrl"] = mesh_url
 
-        job_ref.update(update_data)
+        job_ref.set(update_data, merge=True)
 
         # Step 3: Write item to Firestore 'gallery' collection
         final_image_url = output_url or mesh_url
@@ -167,7 +188,7 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
                 "processedPrompt": processed_prompt,
                 "createdAt": get_utc_now_iso()
             }
-            gallery_ref.set(gallery_data)
+            gallery_ref.set(gallery_data, merge=True)
             logger.info(f"Created gallery item in Firestore 'gallery/{job_id}'")
 
         logger.info(f"Celery task completed successfully for jobId={job_id}")
@@ -175,11 +196,11 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
 
     except SoftTimeLimitExceeded:
         logger.error(f"Celery task execution timed out for jobId={job_id} (soft_time_limit exceeded)")
-        job_ref.update({
+        job_ref.set({
             "status": "error",
             "error": "Task execution timed out (4.5 min limit exceeded)",
             "updatedAt": get_utc_now_iso()
-        })
+        }, merge=True)
         try:
             refund_credits(user_id=user_id, cost=cost, job_id=job_id, reason="Celery soft time limit timeout")
         except Exception as refund_err:
@@ -188,11 +209,11 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
 
     except Exception as err:
         logger.error(f"Celery worker failed for jobId={job_id}: {str(err)}")
-        job_ref.update({
+        job_ref.set({
             "status": "error",
             "error": str(err),
             "updatedAt": get_utc_now_iso()
-        })
+        }, merge=True)
 
         # Refund credits on failure
         try:
