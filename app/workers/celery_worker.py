@@ -151,15 +151,26 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
                 content_type="image/png"
             )
 
-        elif job_type == "MESH_GEN":
-            logger.info(f"Executing TripoSR / Stable Fast 3D Mesh Generation for {job_id}")
+        elif job_type == "IMAGE_3D":
+            logger.info(f"Executing IMAGE_3D: 2D Photo → 3D GLB Mesh for {job_id}")
+            user_prompt = params.get("userPrompt", "")
+            prompt_str = processed_prompt.get("prompt", user_prompt) if isinstance(processed_prompt, dict) and processed_prompt.get("prompt") else user_prompt
+
+            from app.services.image_3d import generate_3d_mesh_from_image
+            glb_bytes = generate_3d_mesh_from_image(
+                image_url=input_image_url,
+                prompt=prompt_str,
+                quality_preset="FAST"
+            )
+
             mesh_url = upload_output_file_to_storage(
                 user_id=user_id,
                 job_id=job_id,
                 filename="mesh.glb",
-                content_bytes=b"GLTF_SAMPLE",
+                content_bytes=glb_bytes,
                 content_type="model/gltf-binary"
             )
+            output_url = mesh_url
 
         # Step 2: Update Firestore jobs doc on completion using merge=True
         update_data = {

@@ -5,6 +5,7 @@ from app.config import settings
 from app.services.prompt_service import load_theme_prompt, STATIC_THEMES
 from app.workers.celery_worker import process_async_job, celery_app
 from app.services.image_processor import generate_placeholder_image
+from app.services.image_3d import generate_3d_mesh_from_image
 
 client = TestClient(app)
 
@@ -66,3 +67,9 @@ def test_local_image_processor():
     assert png_bytes is not None
     assert len(png_bytes) > 1000
     assert png_bytes.startswith(b"\x89PNG")
+
+def test_3d_mesh_generation_pipeline():
+    glb_bytes = generate_3d_mesh_from_image(prompt="A 3D asset model of an object")
+    assert glb_bytes is not None
+    assert len(glb_bytes) > 100
+    assert glb_bytes.startswith(b"glTF")

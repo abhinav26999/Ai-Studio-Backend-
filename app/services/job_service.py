@@ -22,26 +22,26 @@ def get_job_cost(job_type: JobType) -> int:
         return settings.CREDIT_COST_THEME_CHANGE
     elif job_type == JobType.BG_REMOVAL:
         return settings.CREDIT_COST_BG_REMOVAL
-    elif job_type == JobType.MESH_GEN:
+    elif job_type == JobType.IMAGE_3D:
         return settings.CREDIT_COST_MESH_GEN
     return 3
 
 async def create_and_enqueue_job(user_id: str, request: GenerateJobRequest) -> dict:
     """
     Core job orchestrator:
-    1. Validate input parameters (either userPrompt or themeId required).
+    1. Validate input parameters (themeId, userPrompt, or imageUrl required; 1-tap 3D generation allowed).
     2. Calculate cost based on JobType.
     3. Perform atomic credit deduction.
-    4. Process prompt (static lookup for themeId, Qwen 2.5 7B for userPrompt).
+    4. Process prompt.
     5. Write jobs/{jobId} to Firestore.
-    6. Enqueue task for Celery / Redis GPU worker processing.
+    6. Enqueue task for Celery / Redis worker processing.
     7. Return immediately to caller.
     """
     if (
         request.params.themeId is None 
         and not request.params.userPrompt 
         and not request.params.imageUrl 
-        and request.jobType != JobType.BG_REMOVAL
+        and request.jobType not in [JobType.BG_REMOVAL, JobType.IMAGE_3D]
     ):
         raise HTTPException(
             status_code=400,
@@ -120,5 +120,3 @@ def list_user_jobs(user_id: str, limit: int = 20, offset: int = 0) -> dict:
         "count": len(paginated_list),
         "total": len(jobs_list)
     }
-
-

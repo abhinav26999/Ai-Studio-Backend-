@@ -1,68 +1,10 @@
 INFO:     Will watch for changes in these directories: ['/Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [63933] using WatchFiles
-INFO:     Started server process [63936]
+INFO:     Started reloader process [4890] using WatchFiles
+INFO:     Started server process [4894]
 INFO:     Waiting for application startup.
-2026-08-11 18:30:56,917 - ai_studio - INFO - Initializing AI Studio Backend Services...
-2026-08-11 18:30:56,917 - app.db.firebase - INFO - Initializing Firebase Admin SDK using credentials file: /Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-/ai-studio-637ab-firebase-adminsdk-fbsvc-d51de0aebf.json
-2026-08-11 18:30:56,971 - ai_studio - INFO - Firebase Admin SDK initialized successfully for project: ai-studio-637ab
+2026-08-12 18:38:19,615 - ai_studio - INFO - Initializing AI Studio Backend Services...
+2026-08-12 18:38:19,616 - app.db.firebase - INFO - Initializing Firebase Admin SDK using credentials file: /Users/aeologicbuddy/Desktop/Clients Project/Ai-Studio-Backend-/ai-studio-637ab-firebase-adminsdk-fbsvc-d51de0aebf.json
+2026-08-12 18:38:19,671 - ai_studio - INFO - Firebase Admin SDK initialized successfully for project: ai-studio-637ab
 INFO:     Application startup complete.
-INFO:     127.0.0.1:54543 - "GET /health HTTP/1.1" 200 OK
-2026-08-11 18:31:09,982 - app.dependencies.auth - INFO - Using direct user_id/dev token in dev mode: 'lWxV9Cx98sRcXIdRMUTqxiVY24R2'
-2026-08-11 18:31:11,070 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_eddd647b7137. New balance: 64
-2026-08-11 18:31:11,070 - app.services.prompt_service - INFO - Routing user prompt via Qwen 2.5 7B Instruct
-2026-08-11 18:31:12,042 - httpx - INFO - HTTP Request: POST https://router.huggingface.co/v1/chat/completions "HTTP/1.1 200 OK"
-2026-08-11 18:31:12,152 - app.services.job_service - INFO - Created job doc job_eddd647b7137 for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
-2026-08-11 18:31:12,278 - app.services.queue_service - INFO - Successfully enqueued job job_eddd647b7137 to Celery / Redis queue (task_id=7d70c2eb-a8b8-4b14-aecd-8ee040317597)
-INFO:     127.0.0.1:54556 - "POST /v1/generateJob HTTP/1.1" 201 Created
-2026-08-11 18:31:44,094 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_9fa12f4401a9. New balance: 61
-2026-08-11 18:31:44,096 - app.services.prompt_service - INFO - Routing user prompt via Qwen 2.5 7B Instruct
-2026-08-11 18:31:44,383 - httpx - INFO - HTTP Request: POST https://router.huggingface.co/v1/chat/completions "HTTP/1.1 402 Payment Required"
-2026-08-11 18:31:44,384 - app.services.prompt_service - ERROR - Hugging Face Router API returned status 402: {"error":"You have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage."}
-2026-08-11 18:31:44,517 - app.services.job_service - INFO - Created job doc job_9fa12f4401a9 for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
-2026-08-11 18:31:44,520 - app.services.queue_service - INFO - Successfully enqueued job job_9fa12f4401a9 to Celery / Redis queue (task_id=24de1022-ea74-405c-88c1-efa8157b2dbd)
-INFO:     223.177.186.216:0 - "POST /v1/generateJob HTTP/1.1" 201 Created
-2026-08-11 18:38:53,374 - app.services.wallet_service - INFO - Deducted 5 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_99db504d0c9b. New balance: 56
-2026-08-11 18:38:53,375 - app.services.prompt_service - INFO - Routing user prompt via Qwen 2.5 7B Instruct
-2026-08-11 18:38:54,242 - httpx - INFO - HTTP Request: POST https://router.huggingface.co/v1/chat/completions "HTTP/1.1 200 OK"
-2026-08-11 18:38:54,281 - app.services.job_service - INFO - Created job doc job_99db504d0c9b for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 5
-2026-08-11 18:38:54,284 - app.services.queue_service - INFO - Successfully enqueued job job_99db504d0c9b to Celery / Redis queue (task_id=f97dc175-a562-4ede-a47b-701bd28be72c)
-INFO:     223.177.186.216:0 - "POST /v1/generateJob HTTP/1.1" 201 Created
-2026-08-11 18:39:07,782 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_d08c1b18acaf. New balance: 53
-2026-08-11 18:39:07,782 - app.services.prompt_service - INFO - Routing user prompt via Qwen 2.5 7B Instruct
-2026-08-11 18:39:08,068 - httpx - INFO - HTTP Request: POST https://router.huggingface.co/v1/chat/completions "HTTP/1.1 402 Payment Required"
-2026-08-11 18:39:08,069 - app.services.prompt_service - ERROR - Hugging Face Router API returned status 402: {"error":"You have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage."}
-2026-08-11 18:39:08,095 - app.services.job_service - INFO - Created job doc job_d08c1b18acaf for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
-2026-08-11 18:39:08,097 - app.services.queue_service - INFO - Successfully enqueued job job_d08c1b18acaf to Celery / Redis queue (task_id=8d6dea55-ca93-40be-ae5e-6f15f76e22c1)
-INFO:     223.177.186.216:0 - "POST /v1/generateJob HTTP/1.1" 201 Created
-2026-08-11 18:39:29,065 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_165a4e6fe2fd. New balance: 50
-2026-08-11 18:39:29,065 - app.services.prompt_service - INFO - Routing job prompt via static Theme Preset Library (themeId=2)
-2026-08-11 18:39:29,090 - app.services.job_service - INFO - Created job doc job_165a4e6fe2fd for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
-2026-08-11 18:39:29,092 - app.services.queue_service - INFO - Successfully enqueued job job_165a4e6fe2fd to Celery / Redis queue (task_id=5349f293-2547-4990-ba21-05eba532f07c)
-INFO:     223.177.186.216:0 - "POST /v1/generateJob HTTP/1.1" 201 Created
-2026-08-11 18:39:48,912 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_3cea3a93eb64. New balance: 47
-2026-08-11 18:39:48,913 - app.services.prompt_service - INFO - Routing job prompt via static Theme Preset Library (themeId=3)
-2026-08-11 18:39:48,941 - app.services.job_service - INFO - Created job doc job_3cea3a93eb64 for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
-2026-08-11 18:39:48,943 - app.services.queue_service - INFO - Successfully enqueued job job_3cea3a93eb64 to Celery / Redis queue (task_id=747bcd1b-ecfb-4320-9757-85c0b66ab431)
-INFO:     223.177.186.216:0 - "POST /v1/generateJob HTTP/1.1" 201 Created
-2026-08-11 18:40:07,570 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_ed18e3fd8201. New balance: 44
-2026-08-11 18:40:07,571 - app.services.prompt_service - INFO - Routing BG_REMOVAL job via static hardcoded segmentation prompt ($0 LLM cost)
-2026-08-11 18:40:07,596 - app.services.job_service - INFO - Created job doc job_ed18e3fd8201 for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
-2026-08-11 18:40:07,598 - app.services.queue_service - INFO - Successfully enqueued job job_ed18e3fd8201 to Celery / Redis queue (task_id=171d5cb3-c727-403e-b7b9-69a90c4318ab)
-INFO:     223.177.186.216:0 - "POST /v1/generateJob HTTP/1.1" 201 Created
-2026-08-11 18:57:49,176 - app.services.wallet_service - INFO - Deducted 5 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_350ae622b754. New balance: 39
-2026-08-11 18:57:49,178 - app.services.prompt_service - INFO - Routing user prompt via Qwen 2.5 7B Instruct
-2026-08-11 18:57:50,219 - httpx - INFO - HTTP Request: POST https://router.huggingface.co/v1/chat/completions "HTTP/1.1 200 OK"
-2026-08-11 18:57:50,347 - app.services.job_service - INFO - Created job doc job_350ae622b754 for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 5
-2026-08-11 18:57:50,349 - app.services.queue_service - INFO - Successfully enqueued job job_350ae622b754 to Celery / Redis queue (task_id=32249032-9959-4780-bd7a-76e0d97830d6)
-INFO:     115.245.193.3:0 - "POST /v1/generateJob HTTP/1.1" 201 Created
-2026-08-11 18:58:30,940 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_a2f04a094cb2. New balance: 36
-2026-08-11 18:58:30,941 - app.services.prompt_service - INFO - Routing BG_REMOVAL job via static hardcoded segmentation prompt ($0 LLM cost)
-2026-08-11 18:58:31,093 - app.services.job_service - INFO - Created job doc job_a2f04a094cb2 for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
-2026-08-11 18:58:31,095 - app.services.queue_service - INFO - Successfully enqueued job job_a2f04a094cb2 to Celery / Redis queue (task_id=b07d7c04-83b8-49ad-a41e-a6202b1b5e3c)
-INFO:     115.245.193.3:0 - "POST /v1/generateJob HTTP/1.1" 201 Created
-2026-08-11 18:59:20,909 - app.services.wallet_service - INFO - Deducted 3 credits from user lWxV9Cx98sRcXIdRMUTqxiVY24R2 for job job_acf6a12f637e. New balance: 33
-2026-08-11 18:59:20,912 - app.services.prompt_service - INFO - Routing BG_REMOVAL job via static hardcoded segmentation prompt ($0 LLM cost)
-2026-08-11 18:59:21,011 - app.services.job_service - INFO - Created job doc job_acf6a12f637e for user lWxV9Cx98sRcXIdRMUTqxiVY24R2 with cost 3
-2026-08-11 18:59:21,013 - app.services.queue_service - INFO - Successfully enqueued job job_acf6a12f637e to Celery / Redis queue (task_id=7b003da1-4771-464c-a47e-1006d289f7d3)
-INFO:     115.245.193.3:0 - "POST /v1/generateJob HTTP/1.1" 201 Created
+INFO:     127.0.0.1:50897 - "GET /health HTTP/1.1" 200 OK

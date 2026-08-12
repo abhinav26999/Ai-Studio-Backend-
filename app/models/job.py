@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 class JobType(str, Enum):
     IMAGE_GEN = "IMAGE_GEN"
-    MESH_GEN = "MESH_GEN"
+    IMAGE_3D = "IMAGE_3D"
     BG_REMOVAL = "BG_REMOVAL"
     THEME_CHANGE = "THEME_CHANGE"
 
