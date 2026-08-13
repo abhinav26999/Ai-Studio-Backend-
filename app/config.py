@@ -25,6 +25,15 @@ class Settings(BaseSettings):
     CREDIT_COST_THEME_CHANGE: int = 3
     CREDIT_COST_BG_REMOVAL: int = 3
     CREDIT_COST_MESH_GEN: int = 5
+    CREDIT_COST_VIDEO_10S: int = 40
+    CREDIT_COST_VIDEO_15S: int = 50
+
+    # Video Generation Models & GPU Worker / Cloud API Settings
+    WAN_MODEL_ID: str = "Wan-Video/Wan2.2-T2V-720P"
+    GEMINI_FLASH_MODEL_ID: str = "gemini-2.5-flash"
+    GPU_WORKER_URL: str = ""
+    REPLICATE_API_TOKEN: str = ""
+    FAL_KEY: str = ""
     
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -34,12 +34,21 @@ def upload_output_file_to_storage(user_id: str, job_id: str, filename: str, cont
     so the outputs/ folder physically exists in Firebase Storage Console with valid image preview.
     """
     try:
-        bucket = storage.bucket(settings.FIREBASE_STORAGE_BUCKET)
+        import uuid
+        import urllib.parse
+
+        token = str(uuid.uuid4())
+        bucket_name = settings.FIREBASE_STORAGE_BUCKET
+        bucket = storage.bucket(bucket_name)
         blob_path = f"outputs/{user_id}/{job_id}/{filename}"
         blob = bucket.blob(blob_path)
+        blob.metadata = {"firebaseStorageDownloadTokens": token}
         blob.upload_from_string(content_bytes, content_type=content_type)
         logger.info(f"Successfully uploaded physical blob file ({len(content_bytes)} bytes) to Firebase Storage at: {blob_path}")
-        return blob.public_url
+
+        encoded_path = urllib.parse.quote(blob_path, safe="")
+        download_url = f"https://firebasestorage.googleapis.com/v0/b/{bucket_name}/o/{encoded_path}?alt=media&token={token}"
+        return download_url
     except Exception as err:
         logger.warning(f"Firebase Storage SDK upload notice for {job_id}: {str(err)}")
         return f"https://storage.googleapis.com/{settings.FIREBASE_STORAGE_BUCKET}/outputs/{user_id}/{job_id}/{filename}"
@@ -222,3 +231,10 @@ def process_async_job(self, job_id: str, user_id: str, job_type: str, tier: str,
             logger.error(f"Failed to refund credits for jobId={job_id}: {str(refund_err)}")
 
         raise self.retry(exc=err)
+
+# Register video celery worker tasks
+try:
+    import app.workers.video_celery_worker
+except Exception as _err:
+    logger.warning(f"Could not import video_celery_worker: {str(_err)}")
+

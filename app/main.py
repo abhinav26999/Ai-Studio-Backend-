@@ -6,7 +6,10 @@ from app.config import settings
 from app.db.firebase import initialize_firebase
 from app.routes.wallet import router as wallet_router
 from app.routes.jobs import router as jobs_router
+from app.routes.video_jobs import router as video_jobs_router
+from app.routes.face_swap_jobs import router as face_swap_jobs_router
 from app.routes.webhooks import router as webhooks_router
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -29,7 +32,7 @@ app = FastAPI(
     title="AI Studio - Phase 1 Fast Tier Backend API",
     description=(
         "Backend orchestration API for credit management, prompt routing via Hugging Face Qwen 2.5 7B, "
-        "Cloud Tasks queueing, and Cloud Run GPU worker webhooks."
+        "Wan 2.2 Fast Tier Video Generation, Cloud Tasks queueing, and Cloud Run GPU worker webhooks."
     ),
     version="1.0.0",
     docs_url="/docs",
@@ -49,7 +52,10 @@ app.add_middleware(
 # Include Routers
 app.include_router(wallet_router)
 app.include_router(jobs_router)
+app.include_router(video_jobs_router)
+app.include_router(face_swap_jobs_router)
 app.include_router(webhooks_router)
+
 
 @app.get("/health", tags=["system"])
 async def health_check():

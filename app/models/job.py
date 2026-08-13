@@ -8,6 +8,9 @@ class JobType(str, Enum):
     MESH_GEN = "MESH_GEN"
     BG_REMOVAL = "BG_REMOVAL"
     THEME_CHANGE = "THEME_CHANGE"
+    VIDEO_GEN = "VIDEO_GEN"
+    VIDEO_FACE_SWAP = "VIDEO_FACE_SWAP"
+
 
 class JobTier(str, Enum):
     FAST = "FAST"
