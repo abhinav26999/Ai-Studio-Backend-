@@ -1,7 +1,9 @@
 import uuid
 import logging
+from typing import Any
 from datetime import datetime, timezone
 from fastapi import HTTPException
+
 from app.config import settings
 from app.db.firebase import get_db, firestore
 from app.models.job import JobStatus, JobType, JobTier
@@ -125,3 +127,58 @@ async def create_and_enqueue_video_job(user_id: str, request: GenerateVideoJobRe
         "duration": request.duration,
         "createdAt": created_at
     }
+
+
+async def create_and_enqueue_lip_sync_job(user_id: str, request: Any) -> dict:
+    """
+    Lip-Sync Job Orchestrator (100% Free / Zero-Cost):
+    1. Validate input parameters (videoUrl and paragraphText required).
+    2. Deduct fixed 50 wallet credits atomically.
+    3. Write jobs/{jobId} to Firestore.
+    4. Enqueue background Lip-Sync task.
+    5. Return immediate response with jobId.
+    """
+    params = request.params
+    input_media_url = (getattr(params, "imageUrl", None) or getattr(params, "videoUrl", None) or "").strip()
+    if not input_media_url:
+        raise HTTPException(status_code=400, detail="Lip-Sync parameters must specify a non-empty 'imageUrl' or 'videoUrl'.")
+    if not params.paragraphText or not params.paragraphText.strip():
+        raise HTTPException(status_code=400, detail="Lip-Sync parameters must specify a non-empty 'paragraphText'.")
+
+    job_id = f"lsjob_{uuid.uuid4().hex[:12]}"
+    cost = settings.CREDIT_COST_LIP_SYNC
+    created_at = get_utc_now_iso()
+
+    # Step 1: Deduct 50 credits atomically from Firebase Wallet
+    check_and_deduct_credits(user_id=user_id, cost=cost, job_id=job_id)
+
+    # Step 2: Create Firestore job document
+    job_doc_data = {
+        "jobId": job_id,
+        "userId": user_id,
+        "type": JobType.LIP_SYNC.value,
+        "tier": request.tier.value if hasattr(request.tier, 'value') else str(request.tier),
+        "status": JobStatus.PENDING.value,
+        "cost": cost,
+        "params": params.model_dump(),
+        "outputUrl": None,
+        "error": None,
+        "createdAt": created_at
+    }
+
+    db = get_db()
+    db.collection("jobs").document(job_id).set(job_doc_data)
+    logger.info(f"Created Lip-Sync job document {job_id} for user {user_id} with cost {cost} credits")
+
+    # Step 3: Enqueue task for background processing via LipSyncProcessor
+    from app.services.lip_sync_processor import LipSyncProcessor
+    import asyncio
+    asyncio.create_task(LipSyncProcessor.process_job(job_id=job_id, user_id=user_id, params=params.model_dump()))
+
+    return {
+        "jobId": job_id,
+        "status": JobStatus.PENDING.value,
+        "cost": cost,
+        "createdAt": created_at
+    }
+

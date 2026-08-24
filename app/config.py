@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     # Hugging Face Settings
     HF_TOKEN: str = ""
     HF_ROUTER_URL: str = "https://router.huggingface.co/v1"
+    HF_LIP_SYNC_SPACE: str = ""
     QWEN_MODEL_ID: str = "Qwen/Qwen2.5-7B-Instruct"
     BG_REMOVAL_MODEL_ID: str = "briaai/RMBG-2.0"  # Options: "briaai/RMBG-2.0" or "briaai/RMBG-1.4"
     
@@ -27,6 +28,8 @@ class Settings(BaseSettings):
     CREDIT_COST_MESH_GEN: int = 5
     CREDIT_COST_VIDEO_10S: int = 40
     CREDIT_COST_VIDEO_15S: int = 50
+    CREDIT_COST_LIP_SYNC: int = 50
+
 
     # Video Generation Models & GPU Worker / Cloud API Settings
     WAN_MODEL_ID: str = "Wan-Video/Wan2.2-T2V-720P"

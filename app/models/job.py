@@ -10,6 +10,7 @@ class JobType(str, Enum):
     THEME_CHANGE = "THEME_CHANGE"
     VIDEO_GEN = "VIDEO_GEN"
     VIDEO_FACE_SWAP = "VIDEO_FACE_SWAP"
+    LIP_SYNC = "LIP_SYNC"
 
 
 class JobTier(str, Enum):
@@ -27,6 +28,10 @@ class JobParams(BaseModel):
     userPrompt: Optional[str] = None
     themeId: Optional[int] = None
     imageUrl: Optional[str] = None
+    videoUrl: Optional[str] = None
+    paragraphText: Optional[str] = None
+    voice: Optional[str] = "en-US-GuyNeural"
+
 
 class GenerateJobRequest(BaseModel):
     jobType: JobType

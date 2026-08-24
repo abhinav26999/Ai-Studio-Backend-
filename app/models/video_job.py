@@ -35,6 +35,18 @@ class GenerateVideoJobResponse(BaseModel):
     duration: int
     createdAt: str
 
+class LipSyncJobParams(BaseModel):
+    videoUrl: Optional[str] = Field(default=None, description="Uploaded sample video asset URL")
+    imageUrl: Optional[str] = Field(default=None, description="Uploaded sample AI character image asset URL")
+    paragraphText: str = Field(..., description="Paragraph of text for character to speak with lip sync")
+    voice: Optional[str] = Field(default="en-US-GuyNeural", description="Voice selection: 'en-US-GuyNeural' (male) or 'en-US-JennyNeural' (female)")
+
+class GenerateLipSyncJobRequest(BaseModel):
+    jobType: JobType = Field(default=JobType.LIP_SYNC)
+    tier: JobTier = Field(default=JobTier.FAST)
+    params: LipSyncJobParams
+
+
 class VideoJobDocument(BaseModel):
     jobId: str
     userId: str

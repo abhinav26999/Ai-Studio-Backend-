@@ -24,7 +24,10 @@ def get_job_cost(job_type: JobType) -> int:
         return settings.CREDIT_COST_BG_REMOVAL
     elif job_type == JobType.MESH_GEN:
         return settings.CREDIT_COST_MESH_GEN
+    elif job_type == JobType.LIP_SYNC:
+        return settings.CREDIT_COST_LIP_SYNC
     return 3
+
 
 async def create_and_enqueue_job(user_id: str, request: GenerateJobRequest) -> dict:
     """

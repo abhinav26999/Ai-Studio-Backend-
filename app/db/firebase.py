@@ -46,3 +46,24 @@ def get_auth_client():
 def get_storage_bucket():
     initialize_firebase()
     return storage.bucket()
+
+def upload_to_storage(local_path: str, blob_path: str, content_type: str = "video/mp4") -> str:
+    """Uploads a local file to Firebase Storage and returns public media download URL."""
+    import uuid
+    import urllib.parse
+    try:
+        bucket = get_storage_bucket()
+        bucket_name = settings.FIREBASE_STORAGE_BUCKET
+        token = str(uuid.uuid4())
+        
+        blob = bucket.blob(blob_path)
+        blob.metadata = {"firebaseStorageDownloadTokens": token}
+        with open(local_path, "rb") as f:
+            blob.upload_from_file(f, content_type=content_type)
+            
+        encoded_path = urllib.parse.quote(blob_path, safe="")
+        return f"https://firebasestorage.googleapis.com/v0/b/{bucket_name}/o/{encoded_path}?alt=media&token={token}"
+    except Exception as err:
+        logger.warning(f"Firebase Storage upload fallback for {blob_path}: {str(err)}")
+        return f"https://storage.googleapis.com/{settings.FIREBASE_STORAGE_BUCKET}/{blob_path}"
+

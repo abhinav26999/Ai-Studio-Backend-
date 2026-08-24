@@ -24,3 +24,17 @@ htmlcov/
 
 # Logs
 *.log
+
+# Media & Weights
+*.mp4
+*.avi
+*.mov
+*.wav
+*.mp3
+*.pth
+*.onnx
+*.mat
+checkpoints/
+gfpgan/
+sadtalker_src/
+debug_face_box.jpg
