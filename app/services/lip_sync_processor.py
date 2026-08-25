@@ -163,10 +163,10 @@ class LipSyncProcessor:
 
     @classmethod
     def get_elliptical_mouth_mask(cls) -> np.ndarray:
-        """Creates a smooth, calibrated elliptical feather mask in 96x96 canonical space."""
+        """Creates an anatomically calibrated elliptical feather mask in 96x96 canonical space."""
         mask_96 = np.zeros((WAV2LIP_SIZE, WAV2LIP_SIZE), dtype=np.float32)
-        cv2.ellipse(mask_96, (48, 70), (28, 22), 0, 0, 360, 1.0, -1)
-        mask_96 = cv2.GaussianBlur(mask_96, (17, 17), 0)
+        cv2.ellipse(mask_96, (48, 73), (25, 17), 0, 0, 360, 1.0, -1)
+        mask_96 = cv2.GaussianBlur(mask_96, (13, 13), 0)
         return mask_96
 
     @classmethod
@@ -252,12 +252,11 @@ class LipSyncProcessor:
             logger.info(f"Avatar Photo mode: {base_frame.shape[1]}x{base_frame.shape[0]} px.")
 
         target_h, target_w = base_frame.shape[:2]
-        detector = cv2.FaceDetectorYN.create(yunet_model, "", (target_w, target_h), score_threshold=0.60)
+        detector = cv2.FaceDetectorYN.create(yunet_model, "", (target_w, target_h), score_threshold=0.55)
 
         # Detect canonical landmarks on base frame
         canonical_landmarks, _ = cls.detect_landmarks(detector, base_frame, conf_thresh=0.50)
         if canonical_landmarks is None:
-            # Fallback default center landmarks
             cx, cy = target_w / 2.0, target_h * 0.45
             canonical_landmarks = np.array([
                 [cx - 40, cy - 30],
@@ -267,12 +266,12 @@ class LipSyncProcessor:
                 [cx + 30, cy + 40]
             ], dtype=np.float32)
 
-        # Canonical Affine Matrix
         base_M_front, _ = cv2.estimateAffinePartial2D(canonical_landmarks, CANONICAL_PTS_96)
         if base_M_front is None:
             base_M_front = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]], dtype=np.float32)
 
         smoothed_M = base_M_front.copy()
+        prev_center = np.mean(canonical_landmarks, axis=0)
         mask_96 = cls.get_elliptical_mouth_mask()
 
         temp_dir = os.path.join(os.path.dirname(output_path), f"lf_{uuid.uuid4().hex[:6]}")
@@ -285,15 +284,43 @@ class LipSyncProcessor:
 
             if is_video:
                 curr_frame = loaded_frames[idx % len(loaded_frames)].copy()
-                landmarks, conf = cls.detect_landmarks(detector, curr_frame, conf_thresh=0.60)
-                if landmarks is not None:
-                    M_front, _ = cv2.estimateAffinePartial2D(landmarks, CANONICAL_PTS_96)
-                    if M_front is not None:
-                        smoothed_M = 0.70 * smoothed_M + 0.30 * M_front
-                M_to_use = smoothed_M
+                faces = detector.detect(curr_frame)[1]
+                best_face = None
+                if faces is not None and len(faces) > 0:
+                    valid_faces = [f for f in faces if len(f) > 14 and f[-1] >= 0.55]
+                    if valid_faces:
+                        if prev_center is not None:
+                            # Continuity tracking: pick face closest to previous frame's face center
+                            def dist_to_prev(f):
+                                fcx = (f[4] + f[6]) / 2.0
+                                fcy = (f[5] + f[7]) / 2.0
+                                return (fcx - prev_center[0])**2 + (fcy - prev_center[1])**2
+                            best_face = min(valid_faces, key=dist_to_prev)
+                        else:
+                            best_face = max(valid_faces, key=lambda f: f[2] * f[3])
+
+                if best_face is not None:
+                    lm = best_face[4:14].reshape(5, 2).astype(np.float32)
+                    curr_center = np.mean(lm, axis=0)
+
+                    # Outlier jump rejection (> 120px sudden teleportation between adjacent frames)
+                    if prev_center is not None and np.linalg.norm(curr_center - prev_center) > 120:
+                        M_to_use = smoothed_M
+                    else:
+                        M_front, _ = cv2.estimateAffinePartial2D(lm, CANONICAL_PTS_96)
+                        if M_front is not None:
+                            # Velocity-adaptive zero-lag tracking:
+                            # When face is moving fast, track instantaneously (alpha ~ 1.0) with zero phase delay
+                            # When face is resting, smooth sub-pixel sensor jitter (alpha = 0.55)
+                            vel = np.linalg.norm(curr_center - prev_center) if prev_center is not None else 0.0
+                            alpha = min(1.0, max(0.55, vel / 6.0))
+                            smoothed_M = alpha * M_front + (1.0 - alpha) * smoothed_M
+                            prev_center = curr_center
+                        M_to_use = smoothed_M
+                else:
+                    M_to_use = smoothed_M
             else:
                 # Enhanced 3D Living Motion Reenactment for Photos
-                # 3D Depth breathing zoom + Lateral yaw sway + Vertical pitch nodding + Micro-roll
                 s_zoom = 1.0 + 0.010 * np.sin(2 * np.pi * t / 3.4)
                 dx = 3.5 * np.sin(2 * np.pi * t / 4.2) + 1.2 * np.cos(2 * np.pi * t / 2.1)
                 dy = 2.5 * np.cos(2 * np.pi * t / 3.0)
@@ -305,7 +332,6 @@ class LipSyncProcessor:
                 M_living[1, 2] += dy
                 curr_frame = cv2.warpAffine(base_frame, M_living, (target_w, target_h), borderMode=cv2.BORDER_REFLECT)
 
-                # Transform canonical landmarks with living motion
                 corners = canonical_landmarks.reshape(-1, 1, 2)
                 transformed_lm = cv2.transform(corners, M_living).reshape(-1, 2)
                 M_to_use, _ = cv2.estimateAffinePartial2D(transformed_lm, CANONICAL_PTS_96)
