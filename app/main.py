@@ -9,6 +9,7 @@ from app.routes.jobs import router as jobs_router
 from app.routes.video_jobs import router as video_jobs_router
 from app.routes.face_swap_jobs import router as face_swap_jobs_router
 from app.routes.webhooks import router as webhooks_router
+from app.routes.interview_routes import router as interview_routes_router
 
 
 logging.basicConfig(
@@ -55,6 +56,7 @@ app.include_router(jobs_router)
 app.include_router(video_jobs_router)
 app.include_router(face_swap_jobs_router)
 app.include_router(webhooks_router)
+app.include_router(interview_routes_router)
 
 
 @app.get("/health", tags=["system"])

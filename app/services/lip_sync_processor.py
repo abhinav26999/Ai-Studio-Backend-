@@ -184,6 +184,7 @@ class LipSyncProcessor:
         mel_idx_multiplier = 80.0 / FPS
         total_frames = int(round(audio_duration * FPS))
         mel_chunks = []
+        silence_val = -4.0  # Normalized 0 dB silence
         for i in range(total_frames):
             s = int(i * mel_idx_multiplier)
             e = s + MEL_STEP_SIZE
@@ -191,7 +192,7 @@ class LipSyncProcessor:
                 chunk = mel[:, s:e]
             else:
                 pad_width = e - mel.shape[1]
-                chunk = np.pad(mel[:, max(0, s):], ((0, 0), (0, pad_width)), mode="edge")
+                chunk = np.pad(mel[:, max(0, s):], ((0, 0), (0, pad_width)), mode="constant", constant_values=silence_val)
             mel_chunks.append(chunk)
         logger.info(f"Audio duration: {audio_duration:.2f}s -> Mel chunks: {len(mel_chunks)} frames")
 
